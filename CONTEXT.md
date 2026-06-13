@@ -15,9 +15,9 @@ Domain + locked decisions. Workflow: [AGENTS.md](./AGENTS.md).
 | Reallocate | Box→box move; total unchanged (`REALLOCATE`) |
 
 ## Stack (locked)
-PG · Tortoise+Aerich · uv · GraphQL+JWT · gRPC · Next App Router · pnpm · shadcn Vega · TanStack Query · NextAuth v5 → `session.accessToken`
+PG · Tortoise+Aerich · uv · GraphQL reads+JWT · gRPC writes (grpc-web/Envoy) · Next App Router · pnpm · shadcn Vega · TanStack Query · NextAuth v5 → `session.accessToken`
 
-Layer: `models/`→`services/`→`api/graphql/`+`grpc/`
+Layer: `models/`→`services/`→`api/graphql/` (reads) + `grpc/` (writes)
 
 ## Grill (locked)
 | # | Decision |

@@ -27,7 +27,20 @@ Technical design for the Python backend: GraphQL for browser clients, gRPC for s
             └────────────────┘
 ```
 
-Browsers cannot call native gRPC. The **GraphQL API** is the frontend entry point. **gRPC** runs in parallel with the same service layer for contract tests, integrations, and future service splits.
+Browsers call **gRPC-Web** (via Envoy) for mutations; **GraphQL** for reads. Both hit the same `app/services/` layer.
+
+```
+Browser — queries          Browser — mutations
+   │ GraphQL HTTP              │ grpc-web
+   ▼                           ▼
+backend-api :8000          Envoy :8080
+                               ▼
+                           backend-grpc :50051
+            │                      │
+            └──────────┬───────────┘
+                       ▼
+                 app/services/
+```
 
 ## Decisions
 
@@ -37,12 +50,13 @@ Browsers cannot call native gRPC. The **GraphQL API** is the frontend entry poin
 | ORM | Tortoise ORM | Async-native, fits FastAPI |
 | Migrations | Aerich | Official Tortoise migration tool |
 | Package manager | uv | Fast dependency and venv management |
-| Browser API | Strawberry GraphQL on FastAPI | Works with Vite SPA and Next.js client; no server-side BFF required |
-| Service contract | gRPC + Protocol Buffers | Shared proto definitions; servicers call same services as GraphQL |
+| Browser reads | Strawberry GraphQL on FastAPI | Lists, detail, activity, `me` |
+| Browser writes | gRPC-Web → Envoy → gRPC | Auth, CRUD, inventory log mutations |
+| Service contract | gRPC + Protocol Buffers | Shared proto; servicers call same services as GraphQL |
 | HTTP framework | FastAPI | ASGI host for Strawberry, health checks, CORS |
 | Auth | JWT bearer token | `Authorization: Bearer <token>` on GraphQL; same token in gRPC metadata |
 | Config | Pydantic Settings | `.env` / environment variables; `.env.example` in repo |
-| Processes | Two containers, one image | `backend-api` and `backend-grpc` scale independently |
+| Processes | Three backend-facing containers | `backend-api`, `backend-grpc`, `grpc-web` (Envoy) + frontend |
 | Code layout | Layered monolith | Services hold business logic; GraphQL and gRPC are thin adapters |
 | Domain mapping | Pydantic/dataclass DTOs | Services return plain objects; no Tortoise models at API boundary |
 | Tests | pytest + pytest-asyncio | Unit tests mock DB; integration tests use Docker Postgres |
@@ -148,31 +162,43 @@ authorization: Bearer <token>
 
 Servicer rejects unauthenticated or invalid tokens before calling services.
 
-## GraphQL API (frontend contract)
+## GraphQL API (read contract)
 
 Endpoint: `POST /graphql` on `backend-api` (port `8000`).
 
-Frontend (Vite or Next.js client components) uses any GraphQL client (e.g. urql, Apollo, graphql-request). No gRPC in the browser.
+Frontend uses `graphql-request` for **queries only**. Mutations are served via gRPC-Web (see frontend architecture).
 
-Full schema design — mutations, filters, pagination, errors, UUID IDs: **[`api-design.md`](./api-design.md)**
+Full schema — queries, legacy mutations (still on server), filters, pagination: **[`api-design.md`](./api-design.md)**
 
 Summary:
 
-| Operation | Type | Purpose |
-|-----------|------|---------|
-| `register` / `login` | Mutation | Auth → JWT |
-| `components` | Query | List with filter, sort, offset pagination |
-| `component` | Query | Detail + box breakdown |
-| `componentLogs` | Query | Paginated log history |
-| `createComponent` / `updateComponent` / `deleteComponent` | Mutation | Component CRUD |
-| `createCategory` | Mutation | Custom category |
-| `applyInventoryLog` | Mutation | All stock changes (ADD, USE, RETURN, LOST, BURN, DEFECTIVE) |
+| Operation | Type | Frontend uses |
+|-----------|------|---------------|
+| `register` / `login` | Mutation | gRPC (GraphQL kept on server) |
+| `components` | Query | GraphQL |
+| `component` | Query | GraphQL |
+| `componentLogs` / `inventoryLogs` | Query | GraphQL |
+| `categories` / `me` | Query | GraphQL |
+| `createComponent` / `updateComponent` | Mutation | gRPC |
+| `createCategory` / `updateCategory` | Mutation | gRPC |
+| `applyInventoryLog` | Mutation | gRPC |
 
-## gRPC API (service contract)
+## gRPC API (write contract + service boundary)
 
-Defined in `backend/proto/`. Python stubs generated at build/dev time (`grpc_tools.protoc` or Buf).
+Defined in `backend/proto/`. Python stubs: `bash scripts/generate_proto.sh` → `app/grpc/gen/`.
 
-Mirrors the same capabilities as GraphQL where practical. Proto is the source of truth for cross-service contracts.
+Implemented services:
+
+| Service | RPCs |
+|---------|------|
+| `AuthService` | `Register`, `Login` |
+| `CategoryService` | `CreateCategory`, `UpdateCategory` |
+| `InventoryService` | `ListComponents`, `CreateComponent`, `UpdateComponent`, `ApplyInventoryLog` |
+| `HealthService` | `Check` |
+
+Form mutations return proto `oneof` success vs `ValidationErrorMessage` (with `field_errors`). Auth uses gRPC status codes.
+
+Browser path: **grpc-web → Envoy `:8080` → backend-grpc `:50051`**. Config: `docker/envoy.yaml`.
 
 ## Database migrations
 

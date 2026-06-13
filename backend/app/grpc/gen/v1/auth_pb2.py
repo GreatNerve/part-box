@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rv1/auth.proto\x12\x0cinventory.v1\">\n\x0bUserMessage\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x14\n\x0c\x64isplay_name\x18\x03 \x01(\t\"H\n\x0fRegisterRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x14\n\x0c\x64isplay_name\x18\x03 \x01(\t\"/\n\x0cLoginRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"F\n\x0c\x41uthResponse\x12\r\n\x05token\x18\x01 \x01(\t\x12\'\n\x04user\x18\x02 \x01(\x0b\x32\x19.inventory.v1.UserMessage\"7\n\x16ValidationErrorMessage\x12\x0c\n\x04\x63ode\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t2\x95\x01\n\x0b\x41uthService\x12\x45\n\x08Register\x12\x1d.inventory.v1.RegisterRequest\x1a\x1a.inventory.v1.AuthResponse\x12?\n\x05Login\x12\x1a.inventory.v1.LoginRequest\x1a\x1a.inventory.v1.AuthResponseB\x03\x90\x01\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rv1/auth.proto\x12\x0cinventory.v1\">\n\x0bUserMessage\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x14\n\x0c\x64isplay_name\x18\x03 \x01(\t\"H\n\x0fRegisterRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x14\n\x0c\x64isplay_name\x18\x03 \x01(\t\"/\n\x0cLoginRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"F\n\x0c\x41uthResponse\x12\r\n\x05token\x18\x01 \x01(\t\x12\'\n\x04user\x18\x02 \x01(\x0b\x32\x19.inventory.v1.UserMessage2\x95\x01\n\x0b\x41uthService\x12\x45\n\x08Register\x12\x1d.inventory.v1.RegisterRequest\x1a\x1a.inventory.v1.AuthResponse\x12?\n\x05Login\x12\x1a.inventory.v1.LoginRequest\x1a\x1a.inventory.v1.AuthResponseB\x03\x90\x01\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -40,8 +40,6 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_LOGINREQUEST']._serialized_end=216
   _globals['_AUTHRESPONSE']._serialized_start=218
   _globals['_AUTHRESPONSE']._serialized_end=288
-  _globals['_VALIDATIONERRORMESSAGE']._serialized_start=290
-  _globals['_VALIDATIONERRORMESSAGE']._serialized_end=345
-  _globals['_AUTHSERVICE']._serialized_start=348
-  _globals['_AUTHSERVICE']._serialized_end=497
+  _globals['_AUTHSERVICE']._serialized_start=291
+  _globals['_AUTHSERVICE']._serialized_end=440
 # @@protoc_insertion_point(module_scope)

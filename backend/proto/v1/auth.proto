@@ -26,11 +26,6 @@ message AuthResponse {
   UserMessage user = 2;
 }
 
-message ValidationErrorMessage {
-  string code = 1;
-  string message = 2;
-}
-
 service AuthService {
   rpc Register(RegisterRequest) returns (AuthResponse);
   rpc Login(LoginRequest) returns (AuthResponse);

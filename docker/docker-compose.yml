@@ -56,17 +56,32 @@ services:
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_GRAPHQL_URL: ${NEXT_PUBLIC_GRAPHQL_URL:-http://localhost:8000/graphql}
+        NEXT_PUBLIC_GRPC_WEB_URL: ${NEXT_PUBLIC_GRPC_WEB_URL:-http://localhost:8080}
     container_name: box-frontend
     environment:
       AUTH_SECRET: ${AUTH_SECRET:-change-me-in-development}
       AUTH_URL: ${AUTH_URL:-http://localhost:3000}
       GRAPHQL_URL: http://backend-api:8000/graphql
+      GRPC_WEB_URL: http://grpc-web:8080
       NEXT_PUBLIC_GRAPHQL_URL: ${NEXT_PUBLIC_GRAPHQL_URL:-http://localhost:8000/graphql}
+      NEXT_PUBLIC_GRPC_WEB_URL: ${NEXT_PUBLIC_GRPC_WEB_URL:-http://localhost:8080}
     ports:
       - "3000:3000"
     depends_on:
       backend-api:
         condition: service_healthy
+      grpc-web:
+        condition: service_started
+
+  grpc-web:
+    image: envoyproxy/envoy:v1.31-latest
+    container_name: box-grpc-web
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml:ro
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend-grpc
 
   backend-grpc:
     build:

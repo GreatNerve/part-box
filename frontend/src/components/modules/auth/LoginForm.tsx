@@ -11,6 +11,8 @@ import { FormGenerator } from "@/components/includes/FormGenerator";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
+import { grpcLogin } from "@/lib/grpc/mutations";
+import { getGrpcErrorMessage } from "@/lib/grpc/mappers";
 import { loginSchema, type LoginFormValues } from "@/schema";
 
 export function LoginForm() {
@@ -27,21 +29,32 @@ export function LoginForm() {
     setIsSubmitting(true);
     setErrorMessage(null);
 
-    const result = await signIn("credentials", {
-      email: values.email,
-      password: values.password,
-      redirect: false,
-    });
+    try {
+      const auth = await grpcLogin({
+        email: values.email,
+        password: values.password,
+      });
 
-    setIsSubmitting(false);
+      const result = await signIn("credentials", {
+        email: auth.user.email,
+        accessToken: auth.token,
+        id: auth.user.id,
+        name: auth.user.displayName ?? auth.user.email,
+        redirect: false,
+      });
 
-    if (result?.error) {
-      setErrorMessage("Invalid email or password. Check your credentials and try again.");
-      return;
+      if (result?.error) {
+        setErrorMessage("Signed in to gRPC but session could not be created. Try again.");
+        return;
+      }
+
+      router.push("/components");
+      router.refresh();
+    } catch (error) {
+      setErrorMessage(getGrpcErrorMessage(error));
+    } finally {
+      setIsSubmitting(false);
     }
-
-    router.push("/components");
-    router.refresh();
   };
 
   return (

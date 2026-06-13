@@ -5,6 +5,7 @@ import grpc
 import pytest
 
 from app.core.db import close_db, init_db
+from app.grpc import bootstrap as _grpc_bootstrap  # noqa: F401 — adds gen/ to sys.path
 from app.grpc.bootstrap import bind_event_loop
 from app.grpc.factory import register_servicers
 

@@ -11,9 +11,8 @@ import { FormGenerator } from "@/components/includes/FormGenerator";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
-import { getGraphQLClient } from "@/lib/graphql/client";
-import { REGISTER_MUTATION } from "@/lib/graphql/documents";
-import { getGraphQLErrorMessage, isValidationError } from "@/lib/graphql/errors";
+import { grpcRegister } from "@/lib/grpc/mutations";
+import { getGrpcErrorMessage } from "@/lib/grpc/mappers";
 import { registerSchema, type RegisterFormValues } from "@/schema";
 
 export function RegisterForm() {
@@ -31,25 +30,17 @@ export function RegisterForm() {
     setErrorMessage(null);
 
     try {
-      const client = getGraphQLClient();
-      const data = await client.request(REGISTER_MUTATION, {
-        input: {
-          email: values.email,
-          password: values.password,
-          displayName: values.displayName || null,
-        },
-      });
-
-      const result = data.register;
-      if (isValidationError(result)) {
-        setErrorMessage(result.message);
-        setIsSubmitting(false);
-        return;
-      }
-
-      const signInResult = await signIn("credentials", {
+      const auth = await grpcRegister({
         email: values.email,
         password: values.password,
+        displayName: values.displayName || null,
+      });
+
+      const signInResult = await signIn("credentials", {
+        email: auth.user.email,
+        accessToken: auth.token,
+        id: auth.user.id,
+        name: auth.user.displayName ?? auth.user.email,
         redirect: false,
       });
 
@@ -62,7 +53,7 @@ export function RegisterForm() {
       router.push("/components");
       router.refresh();
     } catch (error) {
-      setErrorMessage(getGraphQLErrorMessage(error));
+      setErrorMessage(getGrpcErrorMessage(error));
       setIsSubmitting(false);
     }
   };

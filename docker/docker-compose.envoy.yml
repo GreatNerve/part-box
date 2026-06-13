@@ -1,0 +1,15 @@
+name: box
+
+# gRPC-Web proxy for local dev — forwards :8080 to gRPC on the host (:50051).
+# Start backend gRPC first: cd backend && uv run inventory-grpc
+
+services:
+  grpc-web:
+    image: envoyproxy/envoy:v1.31-latest
+    container_name: box-grpc-web
+    volumes:
+      - ./envoy.dev.yaml:/etc/envoy/envoy.yaml:ro
+    ports:
+      - "8080:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

@@ -72,32 +72,29 @@ frontend/
     │   ├── graphql/
     │   │   ├── client.ts
     │   │   ├── generated/       # GraphQL Codegen output — do not edit
-    │   │   ├── documents/
-    │   │   │   ├── auth.ts
-    │   │   │   ├── components.ts
-    │   │   │   └── categories.ts
-    │   │   └── errors.ts        # parse ValidationError unions
-    │   ├── config.ts            # env helpers (GRAPHQL_URL)
+    │   │   ├── documents/       # query documents only
+    │   │   └── errors.ts
+    │   ├── grpc/
+    │   │   ├── gen/             # protoc grpc-web stubs — regen via pnpm grpc:codegen
+    │   │   ├── clients.ts       # Auth/Category/Inventory grpc-web clients
+    │   │   ├── mutations.ts     # register, CRUD, applyInventoryLog
+    │   │   ├── mappers.ts       # proto → UI types
+    │   │   └── server-auth.ts   # NextAuth login via grpc-web
+    │   ├── config.ts            # GRAPHQL_URL, GRPC_WEB_URL helpers
     │   └── utils.ts             # cn() — shadcn
     │
     ├── hooks/
     │   ├── useAuth.ts           # session helpers (client)
     │   ├── useMediaQuery.ts     # mobile breakpoint for DataTable
-    │   └── graphql/
-    │       ├── useGraphQuery.ts
-    │       └── useGraphMutation.ts
+    │   ├── graphql/
+    │   │   └── useGraphQuery.ts
+    │   └── grpc/
+    │       └── useGrpcMutation.ts
     │
     └── react-query/
         ├── provider.tsx         # QueryClientProvider
-        ├── queries/
-        │   ├── useAuthQuery.ts
-        │   ├── useComponentsQuery.ts
-        │   └── useCategoriesQuery.ts
-        └── mutations/
-            ├── useAuthMutation.ts
-            ├── useComponentsMutation.ts
-            ├── useCategoriesMutation.ts
-            └── useInventoryLogMutation.ts
+        ├── queries/             # GraphQL reads
+        └── mutations/           # gRPC writes (index.ts)
 ```
 
 ---
@@ -173,7 +170,8 @@ Wrap in `src/app/layout.tsx`:
 ## Environment variables
 
 ```env
-NEXT_PUBLIC_GRAPHQL_URL=http://localhost:8000/graphql
+NEXT_PUBLIC_GRAPHQL_URL=http://127.0.0.1:8000/graphql
+NEXT_PUBLIC_GRPC_WEB_URL=http://127.0.0.1:8080
 AUTH_SECRET=generate-with-openssl
 AUTH_TRUST_HOST=true
 ```

@@ -14,7 +14,7 @@ graphify → fewer files read. Replies: **caveman** — terse, drop filler/artic
 | Path | Role |
 |------|------|
 | `backend/app/{models,services,api/graphql}/` | ORM→svc→GraphQL |
-| `frontend/src/{app,components/modules,components/includes,lib/graphql/documents}/` | routes→pages→UI→ops |
+| `frontend/src/{app,components/modules,components/includes,lib/graphql/documents,lib/grpc}/` | routes→pages→UI→GQL queries→gRPC writes |
 | `docs/features/` | product what |
 | `docs/{backend,frontend}/` | tech how |
 | `graphify-out/` | gen map; query only |
@@ -24,13 +24,14 @@ graphify → fewer files read. Replies: **caveman** — terse, drop filler/artic
 
 **FE:** pnpm; JWT=`session.accessToken`; shadcn `render={<Link />}` not `asChild`; never edit `components/ui/`; no `.env.local` commits; `useTheme` UI → `useMounted()` first (SSR mismatch)
 
-**Gen (never edit):** `migrations/`, `components/ui/`, `grpc/gen/`, `graphify-out/*` — regen: Aerich / shadcn / protoc / `/graphify --update`
+**Gen (never edit):** `migrations/`, `components/ui/`, `backend/app/grpc/gen/`, `frontend/src/lib/grpc/gen/`, `graphify-out/*` — regen: Aerich / shadcn / `backend/scripts/generate_proto.sh` / `pnpm grpc:codegen` / `/graphify --update`
 
 **Git:** commit/push/amend when user asks
 
 ## Cmds
 ```bash
 docker compose -f docker/docker-compose.db.yml up -d
+docker compose -f docker/docker-compose.envoy.yml up -d
 cd backend && uv run aerich migrate --name <desc> && uv run aerich upgrade && uv run inventory-api
 cd backend && uv run pytest tests/integration/test_full_user_flow.py -v
 cd frontend && pnpm dev && pnpm build

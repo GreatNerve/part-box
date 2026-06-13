@@ -1,38 +1,82 @@
 import {
-  APPLY_INVENTORY_LOG_MUTATION,
-  CREATE_CATEGORY_MUTATION,
-  CREATE_COMPONENT_MUTATION,
-  UPDATE_CATEGORY_MUTATION,
-  UPDATE_COMPONENT_MUTATION,
-} from "@/lib/graphql/documents";
-import { useGraphMutation } from "@/hooks/graphql/useGraphMutation";
+  grpcApplyInventoryLog,
+  grpcCreateCategory,
+  grpcCreateComponent,
+  grpcUpdateCategory,
+  grpcUpdateComponent,
+} from "@/lib/grpc/mutations";
+import type { InventoryLogType } from "@/lib/graphql/documents";
+import { useGrpcMutation } from "@/hooks/grpc/useGrpcMutation";
 
 export function useCreateCategoryMutation() {
-  return useGraphMutation({
-    document: CREATE_CATEGORY_MUTATION,
+  return useGrpcMutation({
+    mutationFn: (variables: { input: { name: string; lowStockThreshold?: number } }, token) =>
+      grpcCreateCategory(variables.input, token),
   });
 }
 
 export function useUpdateCategoryMutation() {
-  return useGraphMutation({
-    document: UPDATE_CATEGORY_MUTATION,
+  return useGrpcMutation({
+    mutationFn: (
+      variables: {
+        input: {
+          id: string;
+          name?: string | null;
+          lowStockThreshold?: number | null;
+        };
+      },
+      token,
+    ) => grpcUpdateCategory(variables.input, token),
   });
 }
 
 export function useCreateComponentMutation() {
-  return useGraphMutation({
-    document: CREATE_COMPONENT_MUTATION,
+  return useGrpcMutation({
+    mutationFn: (
+      variables: {
+        input: {
+          name: string;
+          categoryId: string;
+          datasheetUrl?: string | null;
+          initialBoxQuantities?: { box: string; quantity: number }[] | null;
+        };
+      },
+      token,
+    ) => grpcCreateComponent(variables.input, token),
   });
 }
 
 export function useUpdateComponentMutation() {
-  return useGraphMutation({
-    document: UPDATE_COMPONENT_MUTATION,
+  return useGrpcMutation({
+    mutationFn: (
+      variables: {
+        input: {
+          id: string;
+          name?: string | null;
+          categoryId?: string | null;
+          datasheetUrl?: string | null;
+        };
+      },
+      token,
+    ) => grpcUpdateComponent(variables.input, token),
   });
 }
 
 export function useApplyInventoryLogMutation() {
-  return useGraphMutation({
-    document: APPLY_INVENTORY_LOG_MUTATION,
+  return useGrpcMutation({
+    mutationFn: (
+      variables: {
+        input: {
+          componentId: string;
+          type: InventoryLogType;
+          quantity: number;
+          box: string;
+          fromBox?: string | null;
+          reason?: string | null;
+          relatedLogId?: string | null;
+        };
+      },
+      token,
+    ) => grpcApplyInventoryLog(variables.input, token),
   });
 }

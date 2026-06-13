@@ -1,11 +1,11 @@
 # Graph Report - RPC_Test  (2026-06-14)
 
 ## Corpus Check
-- 144 files · ~34,401 words
+- 148 files · ~35,311 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1108 nodes · 2721 edges · 90 communities (72 shown, 18 thin omitted)
+- 1132 nodes · 2768 edges · 90 communities (72 shown, 18 thin omitted)
 - Extraction: 69% EXTRACTED · 31% INFERRED · 0% AMBIGUOUS · INFERRED: 850 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
@@ -101,7 +101,7 @@
 - [[_COMMUNITY_Community 89|Community 89]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `cn()` - 143 edges
+1. `cn()` - 149 edges
 2. `ValidationErrorDTO` - 73 edges
 3. `GraphQLContext` - 64 edges
 4. `ValidationErrorType` - 56 edges
@@ -121,8 +121,8 @@
   docs/backend/api-design.md → CONTEXT.md
 - `ValidationError Union Type` --rationale_for--> `GraphQL API`  [EXTRACTED]
   docs/backend/api-design.md → CONTEXT.md
-- `Backend` --conceptually_related_to--> `GraphQL API`  [EXTRACTED]
-  backend/README.md → CONTEXT.md
+- `Backend` --references--> `Backend Naming Conventions`  [EXTRACTED]
+  backend/README.md → docs/backend/naming-conventions.md
 
 ## Import Cycles
 - 1-file cycle: `backend/app/api/main.py -> backend/app/api/main.py`
@@ -168,12 +168,12 @@ Cohesion: 0.08
 Nodes (23): lifespan(), client(), test_health(), UUID, AsyncClient, create_access_token(), decode_access_token(), extract_bearer_token() (+15 more)
 
 ### Community 7 - "BoxSuggestionPicker tsx"
-Cohesion: 0.10
-Nodes (36): BoxSuggestion, BoxSuggestionPicker(), BoxSuggestionPickerProps, InventoryLogDialog(), InventoryLogDialogProps, logTypeOptions, MoveStockDialog(), MoveStockDialogProps (+28 more)
+Cohesion: 0.09
+Nodes (38): BoxSuggestion, BoxSuggestionPicker(), BoxSuggestionPickerProps, InventoryLogDialog(), InventoryLogDialogProps, logTypeOptions, MoveStockDialog(), MoveStockDialogProps (+30 more)
 
 ### Community 8 - "cn"
 Cohesion: 0.08
-Nodes (32): cn(), AlertAction(), Avatar(), AvatarBadge(), AvatarFallback(), AvatarGroup(), AvatarGroupCount(), AvatarImage() (+24 more)
+Nodes (31): cn(), AlertAction(), Avatar(), AvatarBadge(), AvatarFallback(), AvatarGroup(), AvatarGroupCount(), AvatarImage() (+23 more)
 
 ### Community 9 - "FormGenerator tsx"
 Cohesion: 0.10
@@ -188,20 +188,20 @@ Cohesion: 0.18
 Nodes (19): Box (Storage Label), BoxQuantity, Category, Component, ComponentBoxQuantity Model, Component Grouping, datasheetUrl / resourceUrl Field, Low Stock (+11 more)
 
 ### Community 12 - "CategoriesPage tsx"
-Cohesion: 0.24
-Nodes (8): ComponentsPage(), PageHeader(), PageHeaderProps, useCreateComponentMutation(), useCategoriesQuery(), useComponentsQuery(), ComponentFormValues, componentSchema
+Cohesion: 0.16
+Nodes (16): ComponentDetailPage(), ComponentsPage(), DialogForm(), useGraphQuery(), getStockLabel(), getStockTone(), StatCard(), StatCardProps (+8 more)
 
 ### Community 13 - "ComponentDetailPage tsx"
 Cohesion: 0.10
-Nodes (26): ComponentDetailPage(), ComponentDetailPageProps, useGraphMutation(), useGraphQuery(), ComponentDetailRouteProps, getStockLabel(), getStockTone(), StatCard() (+18 more)
+Nodes (19): ComponentDetailPageProps, ComponentDetailRouteProps, BoxBreakdown(), BoxBreakdownProps, BoxQuantityEntry, IsometricBoxProps, logMatchesBox(), InventoryLogFormValues (+11 more)
 
 ### Community 14 - "index ts"
-Cohesion: 0.13
-Nodes (20): APPLY_INVENTORY_LOG_MUTATION, AuthPayload, BoxQuantity, CATEGORIES_QUERY, Component, COMPONENT_LOGS_QUERY, COMPONENT_QUERY, ComponentConnection (+12 more)
+Cohesion: 0.11
+Nodes (24): APPLY_INVENTORY_LOG_MUTATION, AuthPayload, BoxQuantity, CATEGORIES_QUERY, Category, Component, COMPONENT_LOGS_QUERY, COMPONENT_QUERY (+16 more)
 
 ### Community 15 - "LoginForm tsx"
-Cohesion: 0.19
-Nodes (12): LoginForm(), RegisterForm(), getGraphQLErrorMessage(), ContentPanelProps, Card(), CardAction(), CardContent(), CardDescription() (+4 more)
+Cohesion: 0.20
+Nodes (11): LoginForm(), RegisterForm(), getGraphQLErrorMessage(), ContentPanelProps, Card(), CardAction(), CardContent(), CardDescription() (+3 more)
 
 ### Community 16 - "DataTable tsx"
 Cohesion: 0.13
@@ -224,12 +224,12 @@ Cohesion: 0.18
 Nodes (9): geistMono, geistSans, metadata, AppProviders(), useMounted(), ThemeToggle(), ReactQueryProvider(), Toaster() (+1 more)
 
 ### Community 21 - "useMeQuery"
-Cohesion: 0.27
-Nodes (7): PageShell(), useMeQuery(), SettingsPage(), Alert(), AlertDescription(), AlertTitle(), alertVariants
+Cohesion: 0.17
+Nodes (16): ContentPanel(), formatDate(), useCreateCategoryMutation(), useUpdateCategoryMutation(), useMeQuery(), CategoryFormValues, categorySchema, CategoriesAddButton() (+8 more)
 
 ### Community 22 - "sheet tsx"
-Cohesion: 0.19
-Nodes (9): ActivityPage(), logTypeOptions, formatLogTypeLabel(), getLogTypeBadgeVariant(), InventoryLog, ContentPanel(), useInventoryLogsQuery(), Badge() (+1 more)
+Cohesion: 0.10
+Nodes (18): ActivityPage(), logTypeOptions, formatLogTypeLabel(), getLogTypeBadgeVariant(), DataTable(), InventoryLog, LogTypeLabel(), LogTypeLabelProps (+10 more)
 
 ### Community 23 - "__init__ py"
 Cohesion: 0.25
@@ -284,8 +284,8 @@ Cohesion: 0.17
 Nodes (11): Backend Naming Conventions, Class naming (illustrative), Do not, Docker / config (repo root), General rules, GraphQL files, Layer layout — one file per domain, Migrations (+3 more)
 
 ### Community 51 - "Feature: Search and Filter"
-Cohesion: 0.23
-Nodes (9): DataTable(), DialogForm(), Category, useCreateCategoryMutation(), useUpdateCategoryMutation(), CategoryFormValues, categorySchema, CategoriesSettingsSection() (+1 more)
+Cohesion: 0.40
+Nodes (4): MetricStrip(), MetricStripItem, MetricStripProps, valueTone
 
 ### Community 52 - "Feature: User Accounts"
 Cohesion: 0.17
@@ -410,7 +410,7 @@ Nodes (3): `(app)/`, `(public)/(auth)/`, Route groups explained
   docs/frontend/architecture.md · relation: conceptually_related_to
 
 ## Knowledge Gaps
-- **364 isolated node(s):** `User`, `Meta`, `Category`, `Component`, `ComponentBoxQuantity` (+359 more)
+- **375 isolated node(s):** `User`, `Meta`, `Category`, `Component`, `ComponentBoxQuantity` (+370 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **18 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -421,12 +421,12 @@ _Questions this graph is uniquely positioned to answer:_
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
 - **What is the exact relationship between `groupName` and `Next.js App Router`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `cn()` connect `cn` to `AppLayout`, `BoxSuggestionPicker tsx`, `CategoriesPage tsx`, `ComponentDetailPage tsx`, `LoginForm tsx`, `DataTable tsx`, `useMeQuery`, `sheet tsx`?**
+- **Why does `cn()` connect `cn` to `AppLayout`, `BoxSuggestionPicker tsx`, `CategoriesPage tsx`, `ComponentDetailPage tsx`, `LoginForm tsx`, `DataTable tsx`, `Feature: Search and Filter`, `useMeQuery`, `sheet tsx`?**
   _High betweenness centrality (0.050) - this node is a cross-community bridge._
 - **Why does `ValidationErrorDTO` connect `ApplyInventoryLogResult` to `ComponentFilterInput`?**
-  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+  _High betweenness centrality (0.018) - this node is a cross-community bridge._
 - **Why does `GraphQLContext` connect `ApplyInventoryLogResult` to `ComponentFilterInput`, `main py`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Are the 71 inferred relationships involving `ValidationErrorDTO` (e.g. with `ApplyInventoryLogInput` and `ApplyInventoryLogResult`) actually correct?**
   _`ValidationErrorDTO` has 71 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 60 inferred relationships involving `GraphQLContext` (e.g. with `ApplyInventoryLogResult` and `ApplyInventoryLogSuccess`) actually correct?**

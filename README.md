@@ -23,7 +23,17 @@ RPC_Test/
 docker compose -f docker/docker-compose.db.yml up -d
 ```
 
-### 2. Backend
+### 2. gRPC-Web proxy (mutations)
+
+With `uv run inventory-grpc` running on the host (`:50051`):
+
+```bash
+docker compose -f docker/docker-compose.envoy.yml up -d
+```
+
+Stop: `docker compose -f docker/docker-compose.envoy.yml down`
+
+### 3. Backend
 
 ```bash
 cd backend
@@ -40,22 +50,29 @@ uv run inventory-grpc
 uv run pytest tests/integration/grpc -v
 ```
 
-### 3. Frontend
+### 4. Frontend
+
+Requires gRPC on `:50051` and Envoy on `:8080` (see step 2):
+
+```bash
+cd backend && uv run inventory-grpc   # if not already running
+```
 
 ```bash
 cd frontend
-cp .env.example .env.local     # set AUTH_SECRET
+cp .env.example .env.local     # set AUTH_SECRET, NEXT_PUBLIC_GRPC_WEB_URL
 pnpm install
 pnpm dev                       # :3000
 ```
 
-GraphQL: `http://127.0.0.1:8000/graphql`
+GraphQL queries: `http://127.0.0.1:8000/graphql`  
+Mutations (gRPC-Web): `http://127.0.0.1:8080`
 
 **Windows:** use `127.0.0.1` not `localhost` in `DATABASE_URL` / `NEXT_PUBLIC_GRAPHQL_URL` — IPv6 stall adds ~21s per DB query.
 
 ### Full stack (Docker)
 
-Runs Postgres, backend API, gRPC, and frontend together:
+Runs Postgres, backend API, gRPC, **Envoy gRPC-Web proxy**, and frontend together:
 
 ```bash
 docker compose -f docker/docker-compose.yml up --build
@@ -79,8 +96,8 @@ Open `http://localhost:3000`. Set `AUTH_SECRET` (and optionally `JWT_SECRET`) in
 | Layer | Choice |
 |-------|--------|
 | Database | PostgreSQL + Tortoise + Aerich |
-| Browser API | Strawberry GraphQL on FastAPI `:8000` |
-| Service contract | gRPC `:50051` (shared services layer) |
+| Browser reads | Strawberry GraphQL on FastAPI `:8000` |
+| Browser writes | gRPC-Web via Envoy `:8080` → gRPC `:50051` |
 | Frontend | Next.js App Router, shadcn Vega, NextAuth v5, TanStack Query |
 | Auth | JWT bearer (email + password) |
 

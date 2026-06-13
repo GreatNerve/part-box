@@ -39,12 +39,45 @@ class InventoryServiceStub:
                 request_serializer=v1_dot_inventory__pb2.ListComponentsRequest.SerializeToString,
                 response_deserializer=v1_dot_inventory__pb2.ListComponentsResponse.FromString,
                 _registered_method=True)
+        self.CreateComponent = channel.unary_unary(
+                '/inventory.v1.InventoryService/CreateComponent',
+                request_serializer=v1_dot_inventory__pb2.CreateComponentRequest.SerializeToString,
+                response_deserializer=v1_dot_inventory__pb2.CreateComponentResponse.FromString,
+                _registered_method=True)
+        self.UpdateComponent = channel.unary_unary(
+                '/inventory.v1.InventoryService/UpdateComponent',
+                request_serializer=v1_dot_inventory__pb2.UpdateComponentRequest.SerializeToString,
+                response_deserializer=v1_dot_inventory__pb2.UpdateComponentResponse.FromString,
+                _registered_method=True)
+        self.ApplyInventoryLog = channel.unary_unary(
+                '/inventory.v1.InventoryService/ApplyInventoryLog',
+                request_serializer=v1_dot_inventory__pb2.ApplyInventoryLogRequest.SerializeToString,
+                response_deserializer=v1_dot_inventory__pb2.ApplyInventoryLogResponse.FromString,
+                _registered_method=True)
 
 
 class InventoryServiceServicer:
     """Missing associated documentation comment in .proto file."""
 
     def ListComponents(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def CreateComponent(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def UpdateComponent(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ApplyInventoryLog(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -57,6 +90,21 @@ def add_InventoryServiceServicer_to_server(servicer, server):
                     servicer.ListComponents,
                     request_deserializer=v1_dot_inventory__pb2.ListComponentsRequest.FromString,
                     response_serializer=v1_dot_inventory__pb2.ListComponentsResponse.SerializeToString,
+            ),
+            'CreateComponent': grpc.unary_unary_rpc_method_handler(
+                    servicer.CreateComponent,
+                    request_deserializer=v1_dot_inventory__pb2.CreateComponentRequest.FromString,
+                    response_serializer=v1_dot_inventory__pb2.CreateComponentResponse.SerializeToString,
+            ),
+            'UpdateComponent': grpc.unary_unary_rpc_method_handler(
+                    servicer.UpdateComponent,
+                    request_deserializer=v1_dot_inventory__pb2.UpdateComponentRequest.FromString,
+                    response_serializer=v1_dot_inventory__pb2.UpdateComponentResponse.SerializeToString,
+            ),
+            'ApplyInventoryLog': grpc.unary_unary_rpc_method_handler(
+                    servicer.ApplyInventoryLog,
+                    request_deserializer=v1_dot_inventory__pb2.ApplyInventoryLogRequest.FromString,
+                    response_serializer=v1_dot_inventory__pb2.ApplyInventoryLogResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -86,6 +134,87 @@ class InventoryService:
             '/inventory.v1.InventoryService/ListComponents',
             v1_dot_inventory__pb2.ListComponentsRequest.SerializeToString,
             v1_dot_inventory__pb2.ListComponentsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def CreateComponent(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/inventory.v1.InventoryService/CreateComponent',
+            v1_dot_inventory__pb2.CreateComponentRequest.SerializeToString,
+            v1_dot_inventory__pb2.CreateComponentResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def UpdateComponent(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/inventory.v1.InventoryService/UpdateComponent',
+            v1_dot_inventory__pb2.UpdateComponentRequest.SerializeToString,
+            v1_dot_inventory__pb2.UpdateComponentResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ApplyInventoryLog(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/inventory.v1.InventoryService/ApplyInventoryLog',
+            v1_dot_inventory__pb2.ApplyInventoryLogRequest.SerializeToString,
+            v1_dot_inventory__pb2.ApplyInventoryLogResponse.FromString,
             options,
             channel_credentials,
             insecure,

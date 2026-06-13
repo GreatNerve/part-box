@@ -6,9 +6,23 @@ from uuid import UUID, uuid4
 
 import grpc
 import pytest
-from v1 import auth_pb2, auth_pb2_grpc, health_pb2, health_pb2_grpc, inventory_pb2, inventory_pb2_grpc
+from v1 import auth_pb2, auth_pb2_grpc, category_pb2, category_pb2_grpc, health_pb2, health_pb2_grpc, inventory_pb2, inventory_pb2_grpc
 
 from app.services import auth as auth_service
+
+
+async def _register_user(grpc_channel, *, prefix: str = "grpc") -> tuple[str, UUID, str]:
+    stub = auth_pb2_grpc.AuthServiceStub(grpc_channel)
+    email = f"{prefix}-{uuid4()}@example.com"
+    password = "password1"
+    registered = await stub.Register(
+        auth_pb2.RegisterRequest(
+            email=email,
+            password=password,
+            display_name="gRPC Test",
+        )
+    )
+    return registered.token, UUID(registered.user.id), email
 
 
 @pytest.mark.integration
@@ -104,3 +118,66 @@ async def test_grpc_list_components_with_token(grpc_channel):
     finally:
         if user_id is not None:
             await auth_service.delete_user(user_id)
+
+
+@pytest.mark.integration
+async def test_grpc_create_category(grpc_channel):
+    token, user_id, _email = await _register_user(grpc_channel, prefix="grpc-cat")
+    metadata = (("authorization", f"Bearer {token}"),)
+    stub = category_pb2_grpc.CategoryServiceStub(grpc_channel)
+
+    try:
+        response = await stub.CreateCategory(
+            category_pb2.CreateCategoryRequest(name="Sensors", low_stock_threshold=3),
+            metadata=metadata,
+        )
+        assert response.HasField("category")
+        assert response.category.name == "Sensors"
+        assert response.category.low_stock_threshold == 3
+    finally:
+        await auth_service.delete_user(user_id)
+
+
+@pytest.mark.integration
+async def test_grpc_create_component_and_apply_log(grpc_channel):
+    token, user_id, _email = await _register_user(grpc_channel, prefix="grpc-comp")
+    metadata = (("authorization", f"Bearer {token}"),)
+    category_stub = category_pb2_grpc.CategoryServiceStub(grpc_channel)
+    inventory_stub = inventory_pb2_grpc.InventoryServiceStub(grpc_channel)
+
+    try:
+        category = await category_stub.CreateCategory(
+            category_pb2.CreateCategoryRequest(name="Microcontrollers", low_stock_threshold=2),
+            metadata=metadata,
+        )
+        category_id = category.category.id
+
+        created = await inventory_stub.CreateComponent(
+            inventory_pb2.CreateComponentRequest(
+                name="Arduino Uno",
+                category_id=category_id,
+                initial_box_quantities=[
+                    inventory_pb2.BoxQuantityInput(box="Box A", quantity=5),
+                ],
+            ),
+            metadata=metadata,
+        )
+        assert created.HasField("component")
+        assert created.component.total_qty == 5
+        component_id = created.component.id
+
+        applied = await inventory_stub.ApplyInventoryLog(
+            inventory_pb2.ApplyInventoryLogRequest(
+                component_id=component_id,
+                type=inventory_pb2.USE,
+                quantity=2,
+                box="Box A",
+                reason="Lab session",
+            ),
+            metadata=metadata,
+        )
+        assert applied.HasField("success")
+        assert applied.success.component.total_qty == 3
+        assert applied.success.log.quantity == 2
+    finally:
+        await auth_service.delete_user(user_id)

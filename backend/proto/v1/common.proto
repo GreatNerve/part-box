@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package inventory.v1;
+
+option py_generic_services = false;
+
+message FieldErrorMessage {
+  string field = 1;
+  string message = 2;
+}
+
+message ValidationErrorMessage {
+  string code = 1;
+  string message = 2;
+  repeated FieldErrorMessage field_errors = 3;
+}

@@ -1,10 +1,6 @@
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
-import { getGraphQLClient } from "@/lib/graphql/client";
-import { LOGIN_MUTATION } from "@/lib/graphql/documents";
-import { isValidationError } from "@/lib/graphql/errors";
-
 export const authConfig = {
   providers: [
     Credentials({
@@ -12,31 +8,33 @@ export const authConfig = {
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
+        accessToken: { label: "Access Token", type: "text" },
+        id: { label: "User ID", type: "text" },
+        name: { label: "Name", type: "text" },
       },
       async authorize(credentials) {
+        const accessToken = credentials?.accessToken;
+        const id = credentials?.id;
         const email = credentials?.email;
-        const password = credentials?.password;
 
-        if (typeof email !== "string" || typeof password !== "string") {
-          return null;
+        // Session is established after browser gRPC-Web auth (login/register).
+        if (
+          typeof accessToken === "string" &&
+          typeof id === "string" &&
+          typeof email === "string"
+        ) {
+          return {
+            id,
+            email,
+            name:
+              typeof credentials?.name === "string" && credentials.name
+                ? credentials.name
+                : email,
+            accessToken,
+          };
         }
 
-        const client = getGraphQLClient();
-        const data = await client.request(LOGIN_MUTATION, {
-          input: { email, password },
-        });
-
-        const result = data.login;
-        if (isValidationError(result)) {
-          return null;
-        }
-
-        return {
-          id: result.user.id,
-          email: result.user.email,
-          name: result.user.displayName ?? result.user.email,
-          accessToken: result.token,
-        };
+        return null;
       },
     }),
   ],

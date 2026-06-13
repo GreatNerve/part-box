@@ -386,18 +386,23 @@ Include `extensions.code` when helpful (`UNAUTHENTICATED`, `FORBIDDEN`, `INTERNA
 
 ## gRPC parity
 
-Proto should mirror GraphQL capabilities:
+Proto mirrors GraphQL capabilities. **Frontend uses gRPC for all writes**; GraphQL mutations remain on the server for compatibility.
 
-| GraphQL | gRPC (illustrative) |
-|---------|---------------------|
-| `components(filter, pagination)` | `ListComponents(ListComponentsRequest)` |
-| `component(id)` | `GetComponent(GetComponentRequest)` |
-| `applyInventoryLog(input)` | `ApplyInventoryLog(ApplyInventoryLogRequest)` |
-| `createComponent(input)` | `CreateComponent(CreateComponentRequest)` |
+| GraphQL | gRPC | Status |
+|---------|------|--------|
+| `register` / `login` | `AuthService.Register`, `Login` | Implemented |
+| `createCategory` / `updateCategory` | `CategoryService.CreateCategory`, `UpdateCategory` | Implemented |
+| `components(filter, pagination)` | `InventoryService.ListComponents` | Implemented |
+| `createComponent` / `updateComponent` | `InventoryService.CreateComponent`, `UpdateComponent` | Implemented |
+| `applyInventoryLog(input)` | `InventoryService.ApplyInventoryLog` | Implemented |
+| `component(id)` | `GetComponent` | Not yet |
+| `deleteComponent` | `DeleteComponent` | Not yet |
 
-- Request messages use the same filter/sort/pagination fields as GraphQL inputs.
-- Response messages include `oneof` for success vs validation error (proto equivalent of GraphQL union).
+- Request messages use the same fields as GraphQL inputs (optional fields use `has_*` flags in proto3).
+- Form mutation responses use `oneof` success vs `ValidationErrorMessage` (with `field_errors`).
+- Auth errors use gRPC status codes (`INVALID_ARGUMENT`, `UNAUTHENTICATED`).
 - Entity IDs are UUID strings in proto (`string id = 1`).
+- Browser path: grpc-web → Envoy `:8080` → gRPC `:50051`.
 
 ---
 

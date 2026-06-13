@@ -4,7 +4,47 @@ package inventory.v1;
 
 option py_generic_services = false;
 
-import "v1/auth.proto";
+import "v1/common.proto";
+
+enum InventoryLogType {
+  INVENTORY_LOG_TYPE_UNSPECIFIED = 0;
+  ADD_STOCK = 1;
+  USE = 2;
+  RETURN = 3;
+  LOST = 4;
+  BURN = 5;
+  DEFECTIVE = 6;
+  REALLOCATE = 7;
+}
+
+message BoxQuantityMessage {
+  string box = 1;
+  int32 quantity = 2;
+}
+
+message ComponentMessage {
+  string id = 1;
+  string name = 2;
+  string category_id = 3;
+  string category_name = 4;
+  int32 low_stock_threshold = 5;
+  string datasheet_url = 6;
+  int32 total_qty = 7;
+  repeated BoxQuantityMessage box_quantities = 8;
+  string updated_at = 9;
+}
+
+message InventoryLogMessage {
+  string id = 1;
+  string component_id = 2;
+  InventoryLogType type = 3;
+  int32 quantity = 4;
+  string box = 5;
+  string from_box = 6;
+  string reason = 7;
+  string related_log_id = 8;
+  string created_at = 9;
+}
 
 message ListComponentsRequest {
   string search = 1;
@@ -14,18 +54,72 @@ message ListComponentsRequest {
   int32 offset = 5;
 }
 
-message ComponentMessage {
-  string id = 1;
-  string name = 2;
-  string category_id = 3;
-  int32 total_qty = 4;
-}
-
 message ListComponentsResponse {
   repeated ComponentMessage items = 1;
   int32 total_count = 2;
 }
 
+message BoxQuantityInput {
+  string box = 1;
+  int32 quantity = 2;
+}
+
+message CreateComponentRequest {
+  string name = 1;
+  string category_id = 2;
+  string datasheet_url = 3;
+  repeated BoxQuantityInput initial_box_quantities = 4;
+}
+
+message CreateComponentResponse {
+  oneof result {
+    ComponentMessage component = 1;
+    ValidationErrorMessage error = 2;
+  }
+}
+
+message UpdateComponentRequest {
+  string id = 1;
+  string name = 2;
+  string category_id = 3;
+  string datasheet_url = 4;
+  bool has_name = 5;
+  bool has_category_id = 6;
+  bool has_datasheet_url = 7;
+}
+
+message UpdateComponentResponse {
+  oneof result {
+    ComponentMessage component = 1;
+    ValidationErrorMessage error = 2;
+  }
+}
+
+message ApplyInventoryLogRequest {
+  string component_id = 1;
+  InventoryLogType type = 2;
+  int32 quantity = 3;
+  string box = 4;
+  string from_box = 5;
+  string reason = 6;
+  string related_log_id = 7;
+}
+
+message ApplyInventoryLogSuccess {
+  InventoryLogMessage log = 1;
+  ComponentMessage component = 2;
+}
+
+message ApplyInventoryLogResponse {
+  oneof result {
+    ApplyInventoryLogSuccess success = 1;
+    ValidationErrorMessage error = 2;
+  }
+}
+
 service InventoryService {
   rpc ListComponents(ListComponentsRequest) returns (ListComponentsResponse);
+  rpc CreateComponent(CreateComponentRequest) returns (CreateComponentResponse);
+  rpc UpdateComponent(UpdateComponentRequest) returns (UpdateComponentResponse);
+  rpc ApplyInventoryLog(ApplyInventoryLogRequest) returns (ApplyInventoryLogResponse);
 }
