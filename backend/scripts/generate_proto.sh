@@ -7,7 +7,7 @@ OUT_DIR="$ROOT/app/grpc/gen"
 
 mkdir -p "$OUT_DIR"
 
-python -m grpc_tools.protoc \
+uv run python -m grpc_tools.protoc \
   -I "$PROTO_DIR" \
   --python_out="$OUT_DIR" \
   --grpc_python_out="$OUT_DIR" \

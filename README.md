@@ -31,6 +31,13 @@ cp .env.example .env
 uv sync --extra dev
 uv run aerich upgrade          # first time / after model changes
 uv run inventory-api           # GraphQL :8000
+
+# Optional — gRPC (:50051), separate terminal; run after proto gen
+bash scripts/generate_proto.sh # first time / after backend/proto/ changes
+uv run inventory-grpc
+
+# gRPC tests (Postgres required)
+uv run pytest tests/integration/grpc -v
 ```
 
 ### 3. Frontend

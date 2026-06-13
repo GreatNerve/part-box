@@ -1,0 +1,252 @@
+{
+  "app/__init__.py": {
+    "mtime": 1781373270.047112,
+    "ast_hash": "7e5dd7a89c2a9287254cf8232200bbe5",
+    "semantic_hash": ""
+  },
+  "app/api/graphql/auth_mutations.py": {
+    "mtime": 1781373695.6326928,
+    "ast_hash": "65099408c14f797b1b8ab9477745af12",
+    "semantic_hash": ""
+  },
+  "app/api/graphql/auth_types.py": {
+    "mtime": 1781373295.6095157,
+    "ast_hash": "f526d38199d956ccf53cb8e287f8bfa5",
+    "semantic_hash": ""
+  },
+  "app/api/graphql/category_mutations.py": {
+    "mtime": 1781379907.189765,
+    "ast_hash": "7a9d9f64bf1959dfd5ef36db9e12001d",
+    "semantic_hash": ""
+  },
+  "app/api/graphql/category_queries.py": {
+    "mtime": 1781379907.026422,
+    "ast_hash": "acd140993eecf09ab996987a740e87e7",
+    "semantic_hash": ""
+  },
+  "app/api/graphql/component_mutations.py": {
+    "mtime": 1781373876.5407326,
+    "ast_hash": "ffad2f40b60001a4fbd5402c43946e88",
+    "semantic_hash": ""
+  },
+  "app/api/graphql/component_queries.py": {
+    "mtime": 1781379907.1117792,
+    "ast_hash": "f13ea2db8cab9003bd723d873a8c8a3e",
+    "semantic_hash": ""
+  },
+  "app/api/graphql/component_types.py": {
+    "mtime": 1781379907.0801797,
+    "ast_hash": "115e60ecaa1a8b8019379d95e427f4dc",
+    "semantic_hash": ""
+  },
+  "app/api/graphql/context.py": {
+    "mtime": 1781373932.2410293,
+    "ast_hash": "0112ad50349e195cae467fb20325d611",
+    "semantic_hash": ""
+  },
+  "app/api/graphql/inventory_log_mutations.py": {
+    "mtime": 1781379907.1599636,
+    "ast_hash": "f009090bd9d6f2d0badd07f8cc84a299",
+    "semantic_hash": ""
+  },
+  "app/api/graphql/schema.py": {
+    "mtime": 1781373860.144624,
+    "ast_hash": "d45d81bc8a8f0dc489c5d960473f3a2d",
+    "semantic_hash": ""
+  },
+  "app/api/main.py": {
+    "mtime": 1781373299.8956711,
+    "ast_hash": "f156971c6327f16e36e51b0f13667cfd",
+    "semantic_hash": ""
+  },
+  "app/core/auth.py": {
+    "mtime": 1781373421.1237645,
+    "ast_hash": "8674939a2d08b8bb72853e0b636b1a8a",
+    "semantic_hash": ""
+  },
+  "app/core/constants.py": {
+    "mtime": 1781379906.6600132,
+    "ast_hash": "877bb81ca9fcb8b987975092a83d2d40",
+    "semantic_hash": ""
+  },
+  "app/core/db.py": {
+    "mtime": 1781373271.1500244,
+    "ast_hash": "6741ac975a5c2a71320e0e9901fa821b",
+    "semantic_hash": ""
+  },
+  "app/core/settings.py": {
+    "mtime": 1781382641.1689005,
+    "ast_hash": "a5b28db23986453b4422c0cdb1560e10",
+    "semantic_hash": ""
+  },
+  "app/grpc/bootstrap.py": {
+    "mtime": 1781384364.937277,
+    "ast_hash": "caf9fe52d9cecf161c3c5dad683167bd",
+    "semantic_hash": ""
+  },
+  "app/grpc/errors.py": {
+    "mtime": 1781384515.0202663,
+    "ast_hash": "c8bbd47efbe8657c363aeba41cb0d388",
+    "semantic_hash": ""
+  },
+  "app/grpc/factory.py": {
+    "mtime": 1781384368.1004882,
+    "ast_hash": "d84b0f6f2d667012f922e399fb7b209a",
+    "semantic_hash": ""
+  },
+  "app/grpc/gen/__init__.py": {
+    "mtime": 1781384220.0878892,
+    "ast_hash": "2e89fe37732228615351313704d1d6d5",
+    "semantic_hash": ""
+  },
+  "app/grpc/gen/v1/__init__.py": {
+    "mtime": 1781384220.1029296,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "app/grpc/gen/v1/auth_pb2.py": {
+    "mtime": 1781384220.048744,
+    "ast_hash": "b71f8081fa91170351eef6427bdddd60",
+    "semantic_hash": ""
+  },
+  "app/grpc/gen/v1/auth_pb2_grpc.py": {
+    "mtime": 1781384220.048744,
+    "ast_hash": "f00af31f8cdbc266e5a7076397482140",
+    "semantic_hash": ""
+  },
+  "app/grpc/gen/v1/inventory_pb2.py": {
+    "mtime": 1781384220.048744,
+    "ast_hash": "9fc59e4234555dd2e57841f2bb3ddb46",
+    "semantic_hash": ""
+  },
+  "app/grpc/gen/v1/inventory_pb2_grpc.py": {
+    "mtime": 1781384220.048744,
+    "ast_hash": "082ea8e0dc5b3e802031f428ee9e7d27",
+    "semantic_hash": ""
+  },
+  "app/grpc/server.py": {
+    "mtime": 1781384368.555073,
+    "ast_hash": "ae07c117908f8d2e3d795414165c7ed5",
+    "semantic_hash": ""
+  },
+  "app/grpc/servicers/__init__.py": {
+    "mtime": 1781384364.9314265,
+    "ast_hash": "d42bd465e929dec9d4ebd807215e68ac",
+    "semantic_hash": ""
+  },
+  "app/grpc/servicers/auth.py": {
+    "mtime": 1781384516.0995457,
+    "ast_hash": "66526709ad488f4ac27714475987139b",
+    "semantic_hash": ""
+  },
+  "app/grpc/servicers/inventory.py": {
+    "mtime": 1781384518.171105,
+    "ast_hash": "affa126f12d0fa8b8e26b10f4ea0f2cd",
+    "semantic_hash": ""
+  },
+  "app/models/__init__.py": {
+    "mtime": 1781379906.6875508,
+    "ast_hash": "3e56c3e06aa81df3d11c749b07e4424f",
+    "semantic_hash": ""
+  },
+  "app/schemas/category.py": {
+    "mtime": 1781379906.7196171,
+    "ast_hash": "60ff60971f3afb6b116034e683d159cb",
+    "semantic_hash": ""
+  },
+  "app/schemas/component.py": {
+    "mtime": 1781379906.7464614,
+    "ast_hash": "d35b080f22628572f0fab8852f05535c",
+    "semantic_hash": ""
+  },
+  "app/schemas/inventory_log.py": {
+    "mtime": 1781379906.7765052,
+    "ast_hash": "9903db8fc3c66d354d03f7d9ea73a1cf",
+    "semantic_hash": ""
+  },
+  "app/schemas/user.py": {
+    "mtime": 1781373277.9312806,
+    "ast_hash": "adeff1805a8620231cdaf4265695b9c7",
+    "semantic_hash": ""
+  },
+  "app/services/auth.py": {
+    "mtime": 1781379906.838526,
+    "ast_hash": "e97bedf133e2ef7793476d659848a735",
+    "semantic_hash": ""
+  },
+  "app/services/category.py": {
+    "mtime": 1781379906.8901167,
+    "ast_hash": "b558a4b1ea72599cbec7c6336e58a5de",
+    "semantic_hash": ""
+  },
+  "app/services/component.py": {
+    "mtime": 1781379906.9224007,
+    "ast_hash": "a1757697ce9c3be0fb5f68212934bcfb",
+    "semantic_hash": ""
+  },
+  "app/services/inventory_log.py": {
+    "mtime": 1781379906.964961,
+    "ast_hash": "f69b61167511c651c3be60bdfe69d07a",
+    "semantic_hash": ""
+  },
+  "migrations/models/0_20260613232943_init.py": {
+    "mtime": 1781373604.8921883,
+    "ast_hash": "2691a0b6c445f4f0b422b9cbe23e0d1b",
+    "semantic_hash": ""
+  },
+  "migrations/models/1_20260614011303_v11_low_stock_reallocate.py": {
+    "mtime": 1781379783.7996058,
+    "ast_hash": "9d1481866d1fedb3ca985a44cb6201f0",
+    "semantic_hash": ""
+  },
+  "scripts/generate_proto.sh": {
+    "mtime": 1781384205.205593,
+    "ast_hash": "e5cae4c06bbfa616739bf545a9c3015e",
+    "semantic_hash": ""
+  },
+  "scripts/test_user_flow.py": {
+    "mtime": 1781373887.0058067,
+    "ast_hash": "ef15a0bb3811cca3576739bfef65c1d8",
+    "semantic_hash": ""
+  },
+  "tests/conftest.py": {
+    "mtime": 1781373876.8833036,
+    "ast_hash": "ffe673779bf40dd619ed9a7b8cef97c8",
+    "semantic_hash": ""
+  },
+  "tests/integration/api/test_health.py": {
+    "mtime": 1781373322.6764956,
+    "ast_hash": "e6bbf6a5f6af80a93d91a52df9505c05",
+    "semantic_hash": ""
+  },
+  "tests/integration/grpc/conftest.py": {
+    "mtime": 1781384379.5305543,
+    "ast_hash": "55feeffba52f3ff6de4c962e74b750a3",
+    "semantic_hash": ""
+  },
+  "tests/integration/grpc/test_grpc.py": {
+    "mtime": 1781384388.0752745,
+    "ast_hash": "ecb945afae5f7df779c6053a4953b4ad",
+    "semantic_hash": ""
+  },
+  "tests/integration/test_full_user_flow.py": {
+    "mtime": 1781380409.128139,
+    "ast_hash": "4ca9e65d42ffdb53633084b2545fe262",
+    "semantic_hash": ""
+  },
+  "tests/unit/core/test_auth.py": {
+    "mtime": 1781373311.0922673,
+    "ast_hash": "12eab2840eea6106801ee118b56d935d",
+    "semantic_hash": ""
+  },
+  "tests/unit/core/test_settings.py": {
+    "mtime": 1781373311.4135013,
+    "ast_hash": "df11b3d876a855f32febb4705282dadb",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1781379906.4223871,
+    "ast_hash": "214fccac92a267c7a70f3ea021011b58",
+    "semantic_hash": ""
+  }
+}

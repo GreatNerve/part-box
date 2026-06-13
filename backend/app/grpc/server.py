@@ -1,43 +1,35 @@
-"""gRPC server bootstrap — servicers expanded in follow-up tasks."""
+"""gRPC server bootstrap."""
 
-from concurrent import futures
+import asyncio
 import logging
-
-import grpc
 
 from app.core.db import close_db, init_db
 from app.core.settings import settings
+from app.grpc.factory import create_server
 
 logger = logging.getLogger(__name__)
 
 
-async def _startup() -> None:
+async def serve() -> None:
     await init_db()
 
+    server = create_server()
+    listen_addr = f"{settings.grpc_host}:{settings.grpc_port}"
+    server.add_insecure_port(listen_addr)
 
-async def _shutdown() -> None:
-    await close_db()
+    await server.start()
+    logger.info("gRPC server listening on %s", listen_addr)
+
+    try:
+        await server.wait_for_termination()
+    finally:
+        await server.stop(grace=5)
+        await close_db()
 
 
 def run() -> None:
     logging.basicConfig(level=logging.INFO)
-
-    server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers=10))
-    listen_addr = f"{settings.grpc_host}:{settings.grpc_port}"
-    server.add_insecure_port(listen_addr)
-
-    async def serve() -> None:
-        await _startup()
-        logger.info("gRPC server listening on %s", listen_addr)
-        await server.start()
-        await server.wait_for_termination()
-
-    import asyncio
-
-    try:
-        asyncio.run(serve())
-    finally:
-        asyncio.run(_shutdown())
+    asyncio.run(serve())
 
 
 if __name__ == "__main__":
