@@ -4,19 +4,14 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ColumnDef } from "@tanstack/react-table";
-import { ClipboardListIcon, SearchIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 
 import { ContentPanel } from "@/components/includes/layout/ContentPanel";
 import { PageHeader } from "@/components/includes/layout/PageHeader";
 import { PageShell } from "@/components/includes/layout/PageShell";
-import { StatCard } from "@/components/includes/layout/StatCard";
 import { DataTable } from "@/components/includes/DataTable";
-import {
-  formatLogTypeLabel,
-  getLogTypeBadgeVariant,
-} from "@/components/modules/components/InventoryLogDialog";
+import { LogTypeLabel } from "@/components/includes/inventory/LogTypeLabel";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -26,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { InventoryLog, InventoryLogType } from "@/lib/graphql/documents";
+import { formatDateTime } from "@/lib/format";
 import { useInventoryLogsQuery } from "@/react-query/queries";
 
 const logTypeOptions: { label: string; value: InventoryLogType | "ALL" }[] = [
@@ -68,8 +64,8 @@ export function ActivityPage() {
         accessorKey: "createdAt",
         header: "When",
         cell: ({ row }) => (
-          <span className="text-muted-foreground tabular-nums">
-            {new Date(row.original.createdAt).toLocaleString()}
+          <span className="text-muted-foreground whitespace-nowrap tabular-nums">
+            {formatDateTime(row.original.createdAt)}
           </span>
         ),
       },
@@ -80,7 +76,7 @@ export function ActivityPage() {
         cell: ({ row }) => (
           <Link
             href={`/components/${row.original.componentId}`}
-            className="font-medium hover:text-primary hover:underline"
+            className="block max-w-[10rem] truncate font-medium hover:text-primary hover:underline"
             onClick={(event) => event.stopPropagation()}
           >
             {row.original.componentName ?? "Unknown part"}
@@ -91,11 +87,7 @@ export function ActivityPage() {
         accessorKey: "type",
         header: "Event",
         meta: { mobileLabel: "Event" },
-        cell: ({ row }) => (
-          <Badge variant={getLogTypeBadgeVariant(row.original.type)}>
-            {formatLogTypeLabel(row.original.type)}
-          </Badge>
-        ),
+        cell: ({ row }) => <LogTypeLabel type={row.original.type} />,
       },
       {
         accessorKey: "quantity",
@@ -109,13 +101,19 @@ export function ActivityPage() {
         id: "box",
         header: "Box",
         meta: { mobileLabel: "Box" },
-        cell: ({ row }) => formatBoxCell(row.original),
+        cell: ({ row }) => (
+          <span className="max-w-[10rem] truncate">{formatBoxCell(row.original)}</span>
+        ),
       },
       {
         accessorKey: "reason",
         header: "Reason",
         meta: { mobileLabel: "Reason" },
-        cell: ({ row }) => row.original.reason ?? "—",
+        cell: ({ row }) => (
+          <span className="text-muted-foreground max-w-[12rem] truncate">
+            {row.original.reason ?? "—"}
+          </span>
+        ),
       },
     ],
     [],
@@ -126,30 +124,16 @@ export function ActivityPage() {
       <PageHeader
         eyebrow="Audit trail"
         title="Activity"
+        meta={`${totalCount} events`}
         description="Every inventory change across all components, newest first."
       />
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <StatCard
-          label="Log entries"
-          value={totalCount}
-          hint="Matching current filters"
-          icon={ClipboardListIcon}
-        />
-        <StatCard
-          label="Showing"
-          value={items.length}
-          hint="Loaded in this page"
-          icon={ClipboardListIcon}
-        />
-      </div>
-
       <ContentPanel
         title="Workspace activity"
-        description={`${items.length} of ${totalCount} events`}
+        description={`Showing ${items.length} of ${totalCount}`}
         toolbar={
           <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center">
-            <div className="relative flex-1">
+            <div className="relative min-w-0 flex-1">
               <SearchIcon
                 className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
                 aria-hidden
@@ -157,7 +141,7 @@ export function ActivityPage() {
               <Input
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
-                placeholder="Search component name..."
+                placeholder="Search component name…"
                 aria-label="Search activity"
                 className="h-10 pl-9"
               />
@@ -165,7 +149,7 @@ export function ActivityPage() {
             <Input
               value={boxFilter}
               onChange={(event) => setBoxFilter(event.target.value)}
-              placeholder="Filter by box..."
+              placeholder="Filter by box…"
               aria-label="Filter by box"
               className="h-10 sm:max-w-[160px]"
             />

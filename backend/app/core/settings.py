@@ -10,7 +10,7 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    database_url: str = "postgres://inventory:inventory@localhost:5432/inventory"
+    database_url: str = "postgres://inventory:inventory@127.0.0.1:5432/inventory"
     jwt_secret: str = "dev-only-change-me-use-32-chars-min"
     jwt_expiry_minutes: int = 60 * 24 * 7  # 7 days
     cors_origins: str = "http://localhost:3000,http://localhost:5173"

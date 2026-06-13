@@ -37,6 +37,7 @@ type DataTableProps<TData> = {
   columns: ColumnDef<TData, unknown>[];
   data: TData[];
   isLoading?: boolean;
+  dense?: boolean;
   emptyTitle?: string;
   emptyDescription?: string;
   onRowClick?: (row: TData) => void;
@@ -46,6 +47,7 @@ export function DataTable<TData>({
   columns,
   data,
   isLoading = false,
+  dense = false,
   emptyTitle = "No results",
   emptyDescription = "Nothing to show yet.",
   onRowClick,
@@ -59,9 +61,9 @@ export function DataTable<TData>({
 
   if (isLoading) {
     return (
-      <div className="space-y-3">
+      <div className="space-y-2">
         {Array.from({ length: 4 }).map((_, index) => (
-          <Skeleton key={index} className="h-12 w-full" />
+          <Skeleton key={index} className={cn("w-full", dense ? "h-8" : "h-12")} />
         ))}
       </div>
     );
@@ -125,7 +127,12 @@ export function DataTable<TData>({
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id} className="border-b border-border/80 hover:bg-transparent">
             {headerGroup.headers.map((header) => (
-              <TableHead key={header.id}>
+              <TableHead
+                key={header.id}
+                className={cn(
+                  dense && "h-8 px-3 py-1.5 text-[11px] font-medium tracking-wide uppercase",
+                )}
+              >
                 {header.isPlaceholder
                   ? null
                   : flexRender(header.column.columnDef.header, header.getContext())}
@@ -141,12 +148,15 @@ export function DataTable<TData>({
             className={cn(
               "border-b border-border/60 last:border-b-0",
               onRowClick && "cursor-pointer hover:bg-muted/50",
-              "transition-colors",
+              dense ? "transition-colors" : "transition-colors",
             )}
             onClick={onRowClick ? () => onRowClick(row.original) : undefined}
           >
             {row.getVisibleCells().map((cell) => (
-              <TableCell key={cell.id}>
+              <TableCell
+                key={cell.id}
+                className={cn(dense && "px-3 py-1.5 text-sm")}
+              >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </TableCell>
             ))}

@@ -42,7 +42,9 @@ pnpm install
 pnpm dev                       # :3000
 ```
 
-GraphQL: `http://localhost:8000/graphql`
+GraphQL: `http://127.0.0.1:8000/graphql`
+
+**Windows:** use `127.0.0.1` not `localhost` in `DATABASE_URL` / `NEXT_PUBLIC_GRAPHQL_URL` — IPv6 stall adds ~21s per DB query.
 
 ## Documentation
 

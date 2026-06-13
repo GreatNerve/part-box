@@ -16,10 +16,11 @@ export function useMeQuery() {
   });
 }
 
-export function useCategoriesQuery() {
+export function useCategoriesQuery(enabled = true) {
   return useGraphQuery({
     queryKey: ["categories"],
     document: CATEGORIES_QUERY,
+    enabled,
   });
 }
 

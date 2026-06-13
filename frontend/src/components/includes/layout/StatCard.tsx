@@ -20,14 +20,14 @@ const toneStyles = {
 
 export function StatCard({ label, value, hint, icon: Icon, tone = "default" }: StatCardProps) {
   return (
-    <Card size="sm" className="border-border/60 bg-card/80 shadow-sm backdrop-blur-sm">
-      <CardContent className="flex items-start gap-2.5 p-3">
-        <div className={cn("flex size-8 shrink-0 items-center justify-center rounded-lg", toneStyles[tone])}>
-          <Icon className="size-3.5" aria-hidden />
+    <Card size="sm" className="gap-0 border-border/60 bg-card py-0 shadow-sm">
+      <CardContent className="flex items-start gap-3 p-4">
+        <div className={cn("flex size-9 shrink-0 items-center justify-center rounded-lg", toneStyles[tone])}>
+          <Icon className="size-4" aria-hidden />
         </div>
         <div className="min-w-0 space-y-0.5">
           <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">{label}</p>
-          <p className="text-lg font-semibold tabular-nums tracking-tight">{value}</p>
+          <p className="text-xl font-semibold tabular-nums tracking-tight">{value}</p>
           {hint ? <p className="text-muted-foreground text-xs">{hint}</p> : null}
         </div>
       </CardContent>

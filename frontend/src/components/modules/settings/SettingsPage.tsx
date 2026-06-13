@@ -1,18 +1,24 @@
 "use client";
 
+import { useState } from "react";
 import { UserIcon } from "lucide-react";
 
 import { ContentPanel } from "@/components/includes/layout/ContentPanel";
 import { PageHeader } from "@/components/includes/layout/PageHeader";
 import { PageShell } from "@/components/includes/layout/PageShell";
-import { CategoriesSettingsSection } from "@/components/modules/settings/CategoriesSettingsSection";
+import {
+  CategoriesAddButton,
+  CategoriesSettingsSection,
+} from "@/components/modules/settings/CategoriesSettingsSection";
 import { ThemeToggle } from "@/components/modules/layout/ThemeToggle";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
+import { formatDate } from "@/lib/format";
 import { useMeQuery } from "@/react-query/queries";
 
 export function SettingsPage() {
   const meQuery = useMeQuery();
+  const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
 
   return (
     <PageShell>
@@ -25,9 +31,9 @@ export function SettingsPage() {
       <div className="grid gap-4 lg:grid-cols-2">
         <ContentPanel title="Appearance" description="Switch between dark and light mode.">
           <div className="flex items-center justify-between rounded-lg border border-border/60 bg-muted/20 px-4 py-3">
-            <div>
+            <div className="min-w-0">
               <p className="text-sm font-medium">Theme</p>
-              <p className="text-muted-foreground text-xs">Dark mode is the default</p>
+              <p className="text-muted-foreground text-xs">Dark default</p>
             </div>
             <ThemeToggle />
           </div>
@@ -35,10 +41,9 @@ export function SettingsPage() {
 
         <ContentPanel title="Profile" description="Signed-in user from the API.">
           {meQuery.isLoading ? (
-            <div className="space-y-3">
-              <Skeleton className="h-4 w-40" />
-              <Skeleton className="h-4 w-56" />
-              <Skeleton className="h-4 w-32" />
+            <div className="space-y-2">
+              <Skeleton className="h-3 w-40" />
+              <Skeleton className="h-3 w-56" />
             </div>
           ) : null}
 
@@ -52,22 +57,22 @@ export function SettingsPage() {
           {meQuery.data?.me ? (
             <div className="space-y-3">
               <div className="flex items-center gap-3 rounded-lg border border-border/60 bg-muted/20 px-4 py-3">
-                <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-full">
+                <div className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-full">
                   <UserIcon className="size-4" aria-hidden />
                 </div>
-                <div>
-                  <p className="font-medium">{meQuery.data.me.displayName ?? meQuery.data.me.email}</p>
-                  <p className="text-muted-foreground text-xs">{meQuery.data.me.email}</p>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium">
+                    {meQuery.data.me.displayName ?? meQuery.data.me.email}
+                  </p>
+                  <p className="text-muted-foreground truncate text-xs">{meQuery.data.me.email}</p>
                 </div>
               </div>
-              <dl className="divide-y divide-border/60 rounded-lg border border-border/60">
-                <div className="flex justify-between gap-4 px-4 py-3 text-sm">
-                  <dt className="text-muted-foreground">Member since</dt>
-                  <dd className="font-medium tabular-nums">
-                    {new Date(meQuery.data.me.createdAt).toLocaleDateString()}
-                  </dd>
-                </div>
-              </dl>
+              <div className="flex items-center justify-between rounded-lg border border-border/60 px-4 py-3 text-sm">
+                <span className="text-muted-foreground">Member since</span>
+                <span className="font-medium tabular-nums">
+                  {formatDate(meQuery.data.me.createdAt)}
+                </span>
+              </div>
             </div>
           ) : null}
 
@@ -80,8 +85,13 @@ export function SettingsPage() {
       <ContentPanel
         title="Inventory categories"
         description="Per-category low stock thresholds and custom labels."
+        toolbar={<CategoriesAddButton onClick={() => setCategoryDialogOpen(true)} />}
       >
-        <CategoriesSettingsSection />
+        <CategoriesSettingsSection
+          showAddButton={false}
+          dialogOpen={categoryDialogOpen}
+          onDialogOpenChange={setCategoryDialogOpen}
+        />
       </ContentPanel>
     </PageShell>
   );

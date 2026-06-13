@@ -4,14 +4,13 @@ import { useCallback, useMemo, useState } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FolderIcon, PlusIcon, TagsIcon } from "lucide-react";
+import { FolderIcon, PlusIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { DataTable } from "@/components/includes/DataTable";
 import { DialogForm } from "@/components/includes/DialogForm";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { Category } from "@/lib/graphql/documents";
@@ -22,9 +21,21 @@ import { useCreateCategoryMutation, useUpdateCategoryMutation } from "@/react-qu
 
 type CategoryRow = Category & { draftThreshold: number; draftName: string };
 
-export function CategoriesSettingsSection() {
+type CategoriesSettingsSectionProps = {
+  showAddButton?: boolean;
+  dialogOpen?: boolean;
+  onDialogOpenChange?: (open: boolean) => void;
+};
+
+export function CategoriesSettingsSection({
+  showAddButton = true,
+  dialogOpen: dialogOpenProp,
+  onDialogOpenChange,
+}: CategoriesSettingsSectionProps) {
   const queryClient = useQueryClient();
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpenLocal, setDialogOpenLocal] = useState(false);
+  const dialogOpen = dialogOpenProp ?? dialogOpenLocal;
+  const setDialogOpen = onDialogOpenChange ?? setDialogOpenLocal;
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [rowErrors, setRowErrors] = useState<Record<string, string>>({});
   const [drafts, setDrafts] = useState<Record<string, { name: string; threshold: number }>>({});
@@ -97,12 +108,10 @@ export function CategoriesSettingsSection() {
         accessorKey: "name",
         header: "Category",
         cell: ({ row }) => (
-          <div className="flex items-center gap-2">
-            <div className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-md">
-              <FolderIcon className="size-4" aria-hidden />
-            </div>
+          <div className="flex min-w-0 items-center gap-2">
+            <FolderIcon className="text-muted-foreground size-3.5 shrink-0" aria-hidden />
             {row.original.isDefault ? (
-              <span className="font-medium">{row.original.name}</span>
+              <span className="truncate font-medium">{row.original.name}</span>
             ) : (
               <Input
                 value={row.original.draftName}
@@ -115,7 +124,7 @@ export function CategoriesSettingsSection() {
                     },
                   }))
                 }
-                className="h-9 max-w-[220px]"
+                className="h-8 max-w-[12rem] text-sm"
                 aria-label={`Name for ${row.original.name}`}
               />
             )}
@@ -126,16 +135,15 @@ export function CategoriesSettingsSection() {
         accessorKey: "isDefault",
         header: "Type",
         meta: { mobileLabel: "Type" },
-        cell: ({ row }) =>
-          row.original.isDefault ? (
-            <Badge>System default</Badge>
-          ) : (
-            <Badge variant="outline">Custom</Badge>
-          ),
+        cell: ({ row }) => (
+          <span className="text-muted-foreground text-xs">
+            {row.original.isDefault ? "System" : "Custom"}
+          </span>
+        ),
       },
       {
         id: "threshold",
-        header: "Low stock at",
+        header: "Low at",
         meta: { mobileLabel: "Low stock threshold" },
         cell: ({ row }) => (
           <Input
@@ -151,7 +159,7 @@ export function CategoriesSettingsSection() {
                 },
               }))
             }
-            className="h-9 w-24 tabular-nums"
+            className="h-8 w-16 tabular-nums"
             aria-label={`Low stock threshold for ${row.original.name}`}
           />
         ),
@@ -165,17 +173,18 @@ export function CategoriesSettingsSection() {
             (!row.original.isDefault && row.original.draftName !== row.original.name);
           const error = rowErrors[row.original.id];
           return (
-            <div className="flex flex-col items-end gap-1">
+            <div className="flex flex-col items-end gap-0.5">
               <Button
                 size="sm"
                 variant="outline"
+                className="h-7 px-2 text-xs"
                 disabled={!changed || updateMutation.isPending}
                 onClick={() => void handleSaveRow(row.original)}
               >
                 Save
               </Button>
               {error ? (
-                <span className="text-destructive text-xs" role="alert">
+                <span className="text-destructive text-[11px]" role="alert">
                   {error}
                 </span>
               ) : null}
@@ -213,24 +222,15 @@ export function CategoriesSettingsSection() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-lg">
-            <TagsIcon className="size-5" aria-hidden />
-          </div>
-          <div>
-            <p className="font-medium">Categories</p>
-            <p className="text-muted-foreground text-xs">
-              Edit low-stock thresholds for every category. Default names cannot be renamed.
-            </p>
-          </div>
+    <>
+      {showAddButton ? (
+        <div className="mb-2 flex justify-end">
+          <Button size="sm" onClick={() => setDialogOpen(true)} className="gap-1.5">
+            <PlusIcon className="size-3.5" aria-hidden />
+            Add category
+          </Button>
         </div>
-        <Button onClick={() => setDialogOpen(true)} className="gap-2">
-          <PlusIcon className="size-4" aria-hidden />
-          Add category
-        </Button>
-      </div>
+      ) : null}
 
       {categoriesQuery.isError ? (
         <Alert variant="destructive">
@@ -267,6 +267,15 @@ export function CategoriesSettingsSection() {
         isSubmitting={createMutation.isPending}
         errorMessage={submitError}
       />
-    </div>
+    </>
+  );
+}
+
+export function CategoriesAddButton({ onClick }: { onClick: () => void }) {
+  return (
+    <Button size="sm" onClick={onClick} className="gap-1.5">
+      <PlusIcon className="size-3.5" aria-hidden />
+      Add category
+    </Button>
   );
 }

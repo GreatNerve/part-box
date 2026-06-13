@@ -10,6 +10,6 @@ export function PageShell({
   className?: string;
 }) {
   return (
-    <div className={cn("mx-auto flex w-full max-w-7xl flex-col gap-8", className)}>{children}</div>
+    <div className={cn("mx-auto flex w-full max-w-7xl flex-col gap-5", className)}>{children}</div>
   );
 }

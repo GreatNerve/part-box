@@ -1,5 +1,5 @@
 export function getGraphqlUrl(): string {
-  return process.env.NEXT_PUBLIC_GRAPHQL_URL ?? "http://localhost:8000/graphql";
+  return process.env.NEXT_PUBLIC_GRAPHQL_URL ?? "http://127.0.0.1:8000/graphql";
 }
 
 export function getAuthSecret(): string {

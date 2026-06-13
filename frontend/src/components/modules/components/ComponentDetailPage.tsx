@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useForm } from "react-hook-form";
@@ -24,18 +24,18 @@ import { PageHeader } from "@/components/includes/layout/PageHeader";
 import { PageShell } from "@/components/includes/layout/PageShell";
 import { getStockLabel, getStockTone, StatCard } from "@/components/includes/layout/StatCard";
 import { DataTable } from "@/components/includes/DataTable";
+import { LogTypeLabel } from "@/components/includes/inventory/LogTypeLabel";
+import { BoxBreakdown, logMatchesBox } from "@/components/includes/inventory/BoxBreakdown";
 import {
-  formatLogTypeLabel,
-  getLogTypeBadgeVariant,
   InventoryLogDialog,
 } from "@/components/modules/components/InventoryLogDialog";
 import { MoveStockDialog } from "@/components/modules/components/MoveStockDialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { InventoryLog } from "@/lib/graphql/documents";
 import { isValidationError } from "@/lib/graphql/errors";
+import { formatDateTime } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import {
   inventoryLogSchema,
@@ -60,9 +60,11 @@ export function ComponentDetailPage({ componentId }: ComponentDetailPageProps) {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [moveSubmitError, setMoveSubmitError] = useState<string | null>(null);
   const [editSubmitError, setEditSubmitError] = useState<string | null>(null);
+  const [selectedBox, setSelectedBox] = useState<string | null>(null);
+  const historyRef = useRef<HTMLDivElement>(null);
 
   const componentQuery = useComponentQuery(componentId);
-  const categoriesQuery = useCategoriesQuery();
+  const categoriesQuery = useCategoriesQuery(editDialogOpen);
   const logsQuery = useComponentLogsQuery(componentId);
   const applyLogMutation = useApplyInventoryLogMutation();
   const updateMutation = useUpdateComponentMutation();
@@ -99,13 +101,20 @@ export function ComponentDetailPage({ componentId }: ComponentDetailPageProps) {
   const logColumns = useMemo<ColumnDef<InventoryLog>[]>(
     () => [
       {
+        accessorKey: "createdAt",
+        header: "When",
+        meta: { mobileLabel: "When" },
+        cell: ({ row }) => (
+          <span className="text-muted-foreground whitespace-nowrap tabular-nums">
+            {formatDateTime(row.original.createdAt)}
+          </span>
+        ),
+      },
+      {
         accessorKey: "type",
         header: "Event",
-        cell: ({ row }) => (
-          <Badge variant={getLogTypeBadgeVariant(row.original.type)}>
-            {formatLogTypeLabel(row.original.type)}
-          </Badge>
-        ),
+        meta: { mobileLabel: "Event" },
+        cell: ({ row }) => <LogTypeLabel type={row.original.type} />,
       },
       {
         accessorKey: "quantity",
@@ -123,16 +132,18 @@ export function ComponentDetailPage({ componentId }: ComponentDetailPageProps) {
           const log = row.original;
           if (log.type === "REALLOCATE" && log.fromBox) {
             return (
-              <span className="inline-flex items-center gap-1.5">
-                <PackageIcon className="text-muted-foreground size-3.5" aria-hidden />
-                {log.fromBox} → {log.box}
+              <span className="inline-flex min-w-0 items-center gap-1 text-sm">
+                <PackageIcon className="text-muted-foreground size-3 shrink-0" aria-hidden />
+                <span className="truncate">
+                  {log.fromBox} → {log.box}
+                </span>
               </span>
             );
           }
           return (
-            <span className="inline-flex items-center gap-1.5">
-              <PackageIcon className="text-muted-foreground size-3.5" aria-hidden />
-              {log.box}
+            <span className="inline-flex min-w-0 items-center gap-1 text-sm">
+              <PackageIcon className="text-muted-foreground size-3 shrink-0" aria-hidden />
+              <span className="truncate">{log.box}</span>
             </span>
           );
         },
@@ -142,16 +153,6 @@ export function ComponentDetailPage({ componentId }: ComponentDetailPageProps) {
         header: "Reason",
         meta: { mobileLabel: "Reason" },
         cell: ({ row }) => row.original.reason ?? "—",
-      },
-      {
-        accessorKey: "createdAt",
-        header: "When",
-        meta: { mobileLabel: "When" },
-        cell: ({ row }) => (
-          <span className="text-muted-foreground tabular-nums">
-            {new Date(row.original.createdAt).toLocaleString()}
-          </span>
-        ),
       },
     ],
     [],
@@ -291,14 +292,47 @@ export function ComponentDetailPage({ componentId }: ComponentDetailPageProps) {
     }
   };
 
+  const boxQuantities = componentQuery.data?.component?.boxQuantities;
+  const boxSuggestions = useMemo(
+    () =>
+      boxQuantities?.map((entry) => ({
+        box: entry.box,
+        quantity: entry.quantity,
+      })) ?? [],
+    [boxQuantities],
+  );
+  const categoryOptions = useMemo(
+    () =>
+      categoriesQuery.data?.categories.map((category) => ({
+        label: category.name,
+        value: category.id,
+      })) ?? [],
+    [categoriesQuery.data?.categories],
+  );
+
+  const allLogs = logsQuery.data?.componentLogs.items ?? [];
+  const filteredLogs = useMemo(() => {
+    if (!selectedBox) return allLogs;
+    return allLogs.filter((log) => logMatchesBox(log, selectedBox));
+  }, [allLogs, selectedBox]);
+
+  const handleSelectBox = (box: string | null) => {
+    setSelectedBox(box);
+    if (box) {
+      requestAnimationFrame(() => {
+        historyRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
+    }
+  };
+
   if (componentQuery.isLoading) {
     return (
       <PageShell className="gap-5">
         <Skeleton className="h-10 w-64" />
-        <div className="grid gap-3 md:grid-cols-3">
-          <Skeleton className="h-20" />
-          <Skeleton className="h-20" />
-          <Skeleton className="h-20" />
+        <div className="grid gap-4 md:grid-cols-3">
+          <Skeleton className="h-24" />
+          <Skeleton className="h-24" />
+          <Skeleton className="h-24" />
         </div>
         <Skeleton className="h-64 w-full" />
       </PageShell>
@@ -317,17 +351,8 @@ export function ComponentDetailPage({ componentId }: ComponentDetailPageProps) {
   }
 
   const component = componentQuery.data.component;
-  const boxSuggestions = component.boxQuantities.map((entry) => ({
-    box: entry.box,
-    quantity: entry.quantity,
-  }));
   const defaultBox = boxSuggestions[0]?.box ?? "";
   const secondBox = boxSuggestions[1]?.box ?? "";
-  const categoryOptions =
-    categoriesQuery.data?.categories.map((category) => ({
-      label: category.name,
-      value: category.id,
-    })) ?? [];
 
   return (
     <PageShell className="gap-5">
@@ -377,7 +402,7 @@ export function ComponentDetailPage({ componentId }: ComponentDetailPageProps) {
         }
       />
 
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <StatCard
           label="Total stock"
           value={component.totalQty}
@@ -399,120 +424,131 @@ export function ComponentDetailPage({ componentId }: ComponentDetailPageProps) {
         />
       </div>
 
-      <ContentPanel title="Box breakdown" description="Quantities stored in each labeled box.">
-        {component.boxQuantities.length === 0 ? (
-          <div className="rounded-lg border border-dashed border-border/80 bg-muted/20 px-3 py-4 text-center">
-            <p className="text-sm font-medium">No boxes yet</p>
-            <p className="text-muted-foreground mt-0.5 text-xs">
-              Record your first log to create a box location.
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-1.5">
-            {component.boxQuantities.map((entry) => (
-              <div
-                key={entry.box}
-                className="flex items-center justify-between rounded-md border border-border/60 bg-muted/20 px-2.5 py-2"
-              >
-                <span className="inline-flex items-center gap-2 text-sm font-medium">
-                  <PackageIcon className="text-muted-foreground size-3.5" aria-hidden />
-                  {entry.box}
-                </span>
-                <Badge variant="secondary" className="tabular-nums">
-                  {entry.quantity} units
-                </Badge>
-              </div>
-            ))}
-          </div>
-        )}
-      </ContentPanel>
-
       <ContentPanel
-        title="Inventory history"
-        description="Every stock change with box-level detail."
-        toolbar={
-          <>
-            <Button
-              variant="outline"
-              className="gap-2"
-              disabled={component.boxQuantities.length === 0}
-              onClick={() => openMoveDialog(defaultBox, secondBox)}
-            >
-              <ArrowRightLeftIcon className="size-4" aria-hidden />
-              Move stock
-            </Button>
-            <Button className="gap-2 shadow-sm" onClick={() => openRecordDialog(defaultBox)}>
-              <PlusIcon className="size-4" aria-hidden />
-              Record change
-            </Button>
-          </>
+        title="Box breakdown"
+        description={
+          component.boxQuantities.length > 0
+            ? `${component.boxQuantities.length} location${component.boxQuantities.length === 1 ? "" : "s"} · ${component.totalQty} units total`
+            : "Quantities stored in each labeled box."
         }
       >
-        {logsQuery.isError ? (
-          <Alert variant="destructive">
-            <AlertTitle>Could not load logs</AlertTitle>
-            <AlertDescription>{logsQuery.error.message}</AlertDescription>
-          </Alert>
-        ) : (
-          <DataTable
-            columns={logColumns}
-            data={logsQuery.data?.componentLogs.items ?? []}
-            isLoading={logsQuery.isLoading}
-            emptyTitle="No logs yet"
-            emptyDescription="Record your first inventory change to start the audit trail."
-          />
-        )}
+        <BoxBreakdown
+          entries={component.boxQuantities}
+          selectedBox={selectedBox}
+          onSelectBox={handleSelectBox}
+        />
       </ContentPanel>
 
-      <InventoryLogDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        form={form}
-        boxSuggestions={boxSuggestions}
-        componentName={component.name}
-        onSubmit={handleApplyLog}
-        isSubmitting={applyLogMutation.isPending}
-        errorMessage={submitError}
-      />
+      <div ref={historyRef}>
+        <ContentPanel
+          title="Inventory history"
+          description={
+            selectedBox
+              ? `Showing ${filteredLogs.length} log${filteredLogs.length === 1 ? "" : "s"} for ${selectedBox}.`
+              : "Every stock change with box-level detail."
+          }
+          toolbar={
+            <>
+              {selectedBox ? (
+                <Button variant="ghost" size="sm" onClick={() => setSelectedBox(null)}>
+                  Show all logs
+                </Button>
+              ) : null}
+              <Button
+                variant="outline"
+                className="gap-2"
+                disabled={component.boxQuantities.length === 0}
+                onClick={() => openMoveDialog(selectedBox ?? defaultBox, secondBox)}
+              >
+                <ArrowRightLeftIcon className="size-4" aria-hidden />
+                Move stock
+              </Button>
+              <Button
+                className="gap-2 shadow-sm"
+                onClick={() => openRecordDialog(selectedBox ?? defaultBox)}
+              >
+                <PlusIcon className="size-4" aria-hidden />
+                Record change
+              </Button>
+            </>
+          }
+        >
+          {logsQuery.isError ? (
+            <Alert variant="destructive">
+              <AlertTitle>Could not load logs</AlertTitle>
+              <AlertDescription>{logsQuery.error.message}</AlertDescription>
+            </Alert>
+          ) : (
+            <DataTable
+              columns={logColumns}
+              data={filteredLogs}
+              isLoading={logsQuery.isLoading}
+              emptyTitle={selectedBox ? "No logs for this box" : "No logs yet"}
+              emptyDescription={
+                selectedBox
+                  ? "No inventory events recorded for this box location yet."
+                  : "Record your first inventory change to start the audit trail."
+              }
+            />
+          )}
+        </ContentPanel>
+      </div>
 
-      <MoveStockDialog
-        open={moveDialogOpen}
-        onOpenChange={setMoveDialogOpen}
-        form={moveForm}
-        boxSuggestions={boxSuggestions}
-        componentName={component.name}
-        onSubmit={handleMoveStock}
-        isSubmitting={applyLogMutation.isPending}
-        errorMessage={moveSubmitError}
-      />
+      {dialogOpen ? (
+        <InventoryLogDialog
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+          form={form}
+          boxSuggestions={boxSuggestions}
+          componentName={component.name}
+          onSubmit={handleApplyLog}
+          isSubmitting={applyLogMutation.isPending}
+          errorMessage={submitError}
+        />
+      ) : null}
 
-      <DialogForm
-        open={editDialogOpen}
-        onOpenChange={setEditDialogOpen}
-        title="Edit component"
-        description="Update name, category, or resource link."
-        form={editForm}
-        fields={[
-          { name: "name", label: "Name", type: "text", placeholder: "Arduino Nano" },
-          {
-            name: "categoryId",
-            label: "Category",
-            type: "select",
-            placeholder: "Select category",
-            options: categoryOptions,
-          },
-          {
-            name: "datasheetUrl",
-            label: "Resource link URL",
-            type: "text",
-            placeholder: "https://...",
-          },
-        ]}
-        onSubmit={handleEdit}
-        submitLabel="Save"
-        isSubmitting={updateMutation.isPending}
-        errorMessage={editSubmitError}
-      />
+      {moveDialogOpen ? (
+        <MoveStockDialog
+          open={moveDialogOpen}
+          onOpenChange={setMoveDialogOpen}
+          form={moveForm}
+          boxSuggestions={boxSuggestions}
+          componentName={component.name}
+          onSubmit={handleMoveStock}
+          isSubmitting={applyLogMutation.isPending}
+          errorMessage={moveSubmitError}
+        />
+      ) : null}
+
+      {editDialogOpen ? (
+        <DialogForm
+          open={editDialogOpen}
+          onOpenChange={setEditDialogOpen}
+          title="Edit component"
+          description="Update name, category, or resource link."
+          form={editForm}
+          fields={[
+            { name: "name", label: "Name", type: "text", placeholder: "Arduino Nano" },
+            {
+              name: "categoryId",
+              label: "Category",
+              type: "select",
+              placeholder: "Select category",
+              options: categoryOptions,
+            },
+            {
+              name: "datasheetUrl",
+              label: "Resource link URL",
+              type: "text",
+              placeholder: "https://...",
+            },
+          ]}
+          onSubmit={handleEdit}
+          submitLabel="Save"
+          isSubmitting={updateMutation.isPending}
+          errorMessage={editSubmitError}
+        />
+      ) : null}
     </PageShell>
   );
 }
