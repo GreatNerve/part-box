@@ -18,6 +18,7 @@ class Settings(BaseSettings):
     api_port: int = 8000
     grpc_host: str = "0.0.0.0"
     grpc_port: int = 50051
+    deployed_at: str | None = None
 
     @property
     def cors_origins_list(self) -> list[str]:

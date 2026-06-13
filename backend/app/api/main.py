@@ -8,6 +8,7 @@ from strawberry.fastapi import GraphQLRouter
 from app.api.graphql.context import get_context
 from app.api.graphql.schema import schema
 from app.core.db import close_db, init_db
+from app.core.deployment import get_deployed_at_iso
 from app.core.settings import settings
 
 
@@ -34,7 +35,7 @@ app.include_router(graphql_app, prefix="/graphql")
 
 @app.get("/health")
 async def health() -> dict[str, str]:
-    return {"status": "ok"}
+    return {"status": "ok", "deployed_at": get_deployed_at_iso()}
 
 
 def run() -> None:

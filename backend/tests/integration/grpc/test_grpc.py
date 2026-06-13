@@ -6,9 +6,18 @@ from uuid import UUID, uuid4
 
 import grpc
 import pytest
-from v1 import auth_pb2, auth_pb2_grpc, inventory_pb2, inventory_pb2_grpc
+from v1 import auth_pb2, auth_pb2_grpc, health_pb2, health_pb2_grpc, inventory_pb2, inventory_pb2_grpc
 
 from app.services import auth as auth_service
+
+
+@pytest.mark.integration
+async def test_grpc_health(grpc_channel):
+    stub = health_pb2_grpc.HealthServiceStub(grpc_channel)
+    response = await stub.Check(health_pb2.HealthCheckRequest())
+
+    assert response.status == "ok"
+    assert response.deployed_at
 
 
 @pytest.mark.integration

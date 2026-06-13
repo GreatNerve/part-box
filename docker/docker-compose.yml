@@ -20,6 +20,8 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
+      args:
+        DEPLOYED_AT: ${DEPLOYED_AT:-}
     container_name: inventory-backend-api
     command: ["sh", "-c", "aerich upgrade && uv run inventory-api"]
     environment:
@@ -27,6 +29,7 @@ services:
       JWT_SECRET: ${JWT_SECRET:-change-me-in-development}
       JWT_EXPIRY_MINUTES: ${JWT_EXPIRY_MINUTES:-10080}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://localhost:5173}
+      DEPLOYED_AT: ${DEPLOYED_AT:-}
       API_HOST: 0.0.0.0
       API_PORT: 8000
     ports:
@@ -39,11 +42,14 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
+      args:
+        DEPLOYED_AT: ${DEPLOYED_AT:-}
     container_name: inventory-backend-grpc
     command: ["sh", "-c", "aerich upgrade && uv run inventory-grpc"]
     environment:
       DATABASE_URL: postgres://inventory:inventory@postgres:5432/inventory
       JWT_SECRET: ${JWT_SECRET:-change-me-in-development}
+      DEPLOYED_AT: ${DEPLOYED_AT:-}
       GRPC_HOST: 0.0.0.0
       GRPC_PORT: 50051
     ports:

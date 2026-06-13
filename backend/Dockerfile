@@ -16,4 +16,7 @@ RUN uv sync --no-dev
 
 ENV PATH="/app/.venv/bin:$PATH"
 
+ARG DEPLOYED_AT=""
+ENV DEPLOYED_AT=${DEPLOYED_AT}
+
 EXPOSE 8000 50051
