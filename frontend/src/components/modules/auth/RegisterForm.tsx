@@ -23,7 +23,7 @@ export function RegisterForm() {
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { email: "", password: "", displayName: "" },
+    defaultValues: { displayName: "", email: "", password: "" },
   });
 
   const onSubmit = async (values: RegisterFormValues) => {
@@ -78,8 +78,8 @@ export function RegisterForm() {
           <FormGenerator
             form={form}
             fields={[
+              { name: "displayName", label: "Name", type: "text", placeholder: "Your name" },
               { name: "email", label: "Email", type: "email", placeholder: "you@school.edu" },
-              { name: "displayName", label: "Display name", type: "text", placeholder: "Optional" },
               { name: "password", label: "Password", type: "password" },
             ]}
           />
