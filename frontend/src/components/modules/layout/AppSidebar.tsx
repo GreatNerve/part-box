@@ -24,6 +24,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -36,39 +37,63 @@ const navItems = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const { state } = useSidebar();
+  const collapsed = state === "collapsed";
 
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border/80">
-      <SidebarHeader className="border-b border-sidebar-border/80 px-4 py-4 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:py-2">
-        <div className="flex items-center gap-3 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0">
-          <div className="bg-sidebar-primary text-sidebar-primary-foreground flex size-9 shrink-0 items-center justify-center rounded-lg shadow-sm group-data-[collapsible=icon]:size-8">
-            <CpuIcon className="size-4 group-data-[collapsible=icon]:size-3.5" aria-hidden />
+      <SidebarHeader
+        className={cn(
+          "border-b border-sidebar-border/80",
+          collapsed ? "items-center px-0 py-2" : "px-4 py-4",
+        )}
+      >
+        <div
+          className={cn(
+            "flex items-center gap-3",
+            collapsed && "w-full justify-center gap-0",
+          )}
+        >
+          <div
+            className={cn(
+              "bg-sidebar-primary text-sidebar-primary-foreground flex shrink-0 items-center justify-center rounded-lg shadow-sm",
+              collapsed ? "size-8" : "size-9",
+            )}
+          >
+            <CpuIcon className={cn(collapsed ? "size-3.5" : "size-4")} aria-hidden />
           </div>
-          <div className="min-w-0 group-data-[collapsible=icon]:hidden">
-            <p className="truncate text-sm font-semibold tracking-tight">Parts Desk</p>
-            <p className="text-muted-foreground truncate text-xs">Student inventory</p>
-          </div>
-          <div className="ml-auto group-data-[collapsible=icon]:hidden">
-            <ThemeToggle />
-          </div>
+          {!collapsed && (
+            <>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold tracking-tight">Parts Desk</p>
+                <p className="text-muted-foreground truncate text-xs">Student inventory</p>
+              </div>
+              <div className="ml-auto">
+                <ThemeToggle />
+              </div>
+            </>
+          )}
         </div>
       </SidebarHeader>
-      <SidebarContent className="px-2 py-4 group-data-[collapsible=icon]:px-1 group-data-[collapsible=icon]:py-2">
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground px-2 text-[11px] tracking-widest uppercase group-data-[collapsible=icon]:mt-0 group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:h-0">
-            Workspace
-          </SidebarGroupLabel>
+      <SidebarContent className={cn("py-4", collapsed ? "gap-1 px-0 py-2" : "px-2")}>
+        <SidebarGroup className={cn(collapsed && "p-0")}>
+          {!collapsed && (
+            <SidebarGroupLabel className="text-muted-foreground px-2 text-[11px] tracking-widest uppercase">
+              Workspace
+            </SidebarGroupLabel>
+          )}
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className={cn(collapsed && "items-center gap-1")}>
               {navItems.map((item) => {
                 const isActive = pathname.startsWith(item.href);
                 return (
-                  <SidebarMenuItem key={item.href}>
+                  <SidebarMenuItem key={item.href} className={cn(collapsed && "flex justify-center")}>
                     <SidebarMenuButton
                       isActive={isActive}
                       render={<Link href={item.href} />}
                       className={cn(
-                        "h-10 rounded-lg px-3",
+                        "rounded-lg",
+                        collapsed ? "size-8! p-0!" : "h-10 px-3",
                         isActive && "bg-sidebar-accent font-medium shadow-sm",
                       )}
                     >
@@ -82,14 +107,24 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="border-t border-sidebar-border/80 p-3 group-data-[collapsible=icon]:p-2">
+      <SidebarFooter
+        className={cn(
+          "border-t border-sidebar-border/80",
+          collapsed ? "flex items-center px-0 py-2" : "p-3",
+        )}
+      >
         <Button
           variant="outline"
-          className="w-full justify-start gap-2 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0"
+          className={cn(
+            "gap-2",
+            collapsed
+              ? "mx-auto size-8 justify-center p-0"
+              : "w-full justify-start",
+          )}
           onClick={() => signOut({ callbackUrl: "/login" })}
         >
           <LogOutIcon className="size-4 shrink-0" aria-hidden />
-          <span className="group-data-[collapsible=icon]:hidden">Sign out</span>
+          {!collapsed && <span>Sign out</span>}
         </Button>
       </SidebarFooter>
       <SidebarRail />
