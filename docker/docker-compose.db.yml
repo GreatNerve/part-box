@@ -1,20 +1,22 @@
+name: box
+
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: inventory-postgres
+    container_name: box-postgres
     environment:
-      POSTGRES_USER: inventory
-      POSTGRES_PASSWORD: inventory
-      POSTGRES_DB: inventory
+      POSTGRES_USER: box
+      POSTGRES_PASSWORD: box
+      POSTGRES_DB: box
     ports:
       - "5432:5432"
     volumes:
-      - inventory_postgres_data:/var/lib/postgresql/data
+      - box_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U inventory -d inventory"]
+      test: ["CMD-SHELL", "pg_isready -U box -d box"]
       interval: 5s
       timeout: 5s
       retries: 5
 
 volumes:
-  inventory_postgres_data:
+  box_postgres_data:

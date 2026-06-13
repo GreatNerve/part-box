@@ -1,17 +1,19 @@
+name: box
+
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: inventory-postgres
+    container_name: box-postgres
     environment:
-      POSTGRES_USER: inventory
-      POSTGRES_PASSWORD: inventory
-      POSTGRES_DB: inventory
+      POSTGRES_USER: box
+      POSTGRES_PASSWORD: box
+      POSTGRES_DB: box
     ports:
       - "5432:5432"
     volumes:
-      - inventory_postgres_data:/var/lib/postgresql/data
+      - box_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U inventory -d inventory"]
+      test: ["CMD-SHELL", "pg_isready -U box -d box"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -22,10 +24,10 @@ services:
       dockerfile: Dockerfile
       args:
         DEPLOYED_AT: ${DEPLOYED_AT:-}
-    container_name: inventory-backend-api
+    container_name: box-backend-api
     command: ["sh", "-c", "aerich upgrade && uv run inventory-api"]
     environment:
-      DATABASE_URL: postgres://inventory:inventory@postgres:5432/inventory
+      DATABASE_URL: postgres://box:box@postgres:5432/box
       JWT_SECRET: ${JWT_SECRET:-change-me-in-development}
       JWT_EXPIRY_MINUTES: ${JWT_EXPIRY_MINUTES:-10080}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://localhost:5173}
@@ -34,8 +36,36 @@ services:
       API_PORT: 8000
     ports:
       - "8000:8000"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'python -c "import urllib.request; urllib.request.urlopen(''http://127.0.0.1:8000/health'')" || exit 1',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     depends_on:
       postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_GRAPHQL_URL: ${NEXT_PUBLIC_GRAPHQL_URL:-http://localhost:8000/graphql}
+    container_name: box-frontend
+    environment:
+      AUTH_SECRET: ${AUTH_SECRET:-change-me-in-development}
+      AUTH_URL: ${AUTH_URL:-http://localhost:3000}
+      GRAPHQL_URL: http://backend-api:8000/graphql
+      NEXT_PUBLIC_GRAPHQL_URL: ${NEXT_PUBLIC_GRAPHQL_URL:-http://localhost:8000/graphql}
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend-api:
         condition: service_healthy
 
   backend-grpc:
@@ -44,10 +74,10 @@ services:
       dockerfile: Dockerfile
       args:
         DEPLOYED_AT: ${DEPLOYED_AT:-}
-    container_name: inventory-backend-grpc
+    container_name: box-backend-grpc
     command: ["sh", "-c", "aerich upgrade && uv run inventory-grpc"]
     environment:
-      DATABASE_URL: postgres://inventory:inventory@postgres:5432/inventory
+      DATABASE_URL: postgres://box:box@postgres:5432/box
       JWT_SECRET: ${JWT_SECRET:-change-me-in-development}
       DEPLOYED_AT: ${DEPLOYED_AT:-}
       GRPC_HOST: 0.0.0.0
@@ -59,4 +89,4 @@ services:
         condition: service_healthy
 
 volumes:
-  inventory_postgres_data:
+  box_postgres_data:

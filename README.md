@@ -53,6 +53,16 @@ GraphQL: `http://127.0.0.1:8000/graphql`
 
 **Windows:** use `127.0.0.1` not `localhost` in `DATABASE_URL` / `NEXT_PUBLIC_GRAPHQL_URL` — IPv6 stall adds ~21s per DB query.
 
+### Full stack (Docker)
+
+Runs Postgres, backend API, gRPC, and frontend together:
+
+```bash
+docker compose -f docker/docker-compose.yml up --build
+```
+
+Open `http://localhost:3000`. Set `AUTH_SECRET` (and optionally `JWT_SECRET`) in a `.env` file next to the compose file or in your shell before `up`.
+
 ## Documentation
 
 | Doc | Purpose |

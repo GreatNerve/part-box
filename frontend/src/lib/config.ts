@@ -1,4 +1,9 @@
 export function getGraphqlUrl(): string {
+  // Server-side (SSR, NextAuth): internal Docker network URL when set
+  if (typeof window === "undefined" && process.env.GRAPHQL_URL) {
+    return process.env.GRAPHQL_URL;
+  }
+
   return process.env.NEXT_PUBLIC_GRAPHQL_URL ?? "http://127.0.0.1:8000/graphql";
 }
 
