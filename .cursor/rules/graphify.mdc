@@ -1,0 +1,17 @@
+---
+description: graphify before exploration
+alwaysApply: true
+---
+
+Graph: `graphify-out/graph.json`.
+
+Before Read/Grep/Glob explore:
+- `graphify query "<q>"`
+- `graphify path "<A>" "<B>"`
+- `graphify explain "<concept>"`
+
+Open graph hits only. Skip if editing known lines | missing `graph.json`.
+
+After changes: `graphify update .`. Full rebuild: `/graphify --update`.
+
+Never edit `graphify-out/`.

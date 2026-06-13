@@ -12,6 +12,7 @@ class CategoryType:
     id: strawberry.ID
     name: str
     is_default: bool
+    low_stock_threshold: int
 
 
 @strawberry.type
@@ -36,6 +37,11 @@ class Query:
             raise GraphQLError("Authentication required.", extensions={"code": "UNAUTHENTICATED"})
         items = await category_service.list_categories(info.context.user_id)
         return [
-            CategoryType(id=strawberry.ID(str(item.id)), name=item.name, is_default=item.is_default)
+            CategoryType(
+                id=strawberry.ID(str(item.id)),
+                name=item.name,
+                is_default=item.is_default,
+                low_stock_threshold=item.low_stock_threshold,
+            )
             for item in items
         ]

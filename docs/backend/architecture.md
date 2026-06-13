@@ -190,6 +190,16 @@ aerich upgrade
 
 Migration files live in `backend/migrations/` and are committed to git.
 
+**Do not create or edit migration files by hand.** After changing Tortoise models in `app/models/`, generate the migration:
+
+```bash
+cd backend
+uv run aerich migrate --name <short_description>
+uv run aerich upgrade
+```
+
+Aerich compares models to the last migration state and writes the SQL. Editing generated files breaks the migration chain and can desync production databases.
+
 ## Configuration
 
 Environment variables (see `.env.example` when scaffolded):

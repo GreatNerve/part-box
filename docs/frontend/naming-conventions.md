@@ -1,117 +1,96 @@
 # Frontend Naming Conventions
 
-Folder and file naming rules for the Next.js dev app. Shared `components/`, `hooks/`, and `lib/` carry over to the Vite production SPA.
+File and folder naming for the Next.js app under `frontend/src/`. Shared paths carry over to the Vite production SPA.
 
 ## General rules
 
-| Rule | Convention |
-|------|------------|
-| Route segments (App Router) | `kebab-case` folders | `app/components/[id]/page.tsx` |
-| React components | `PascalCase` filename | `ComponentList.tsx` |
-| Hooks | `camelCase` filename, `use` prefix | `useAuth.ts` |
-| Non-UI utilities | `camelCase` or domain name | `lib/graphql/client.ts` |
-| GraphQL documents | `camelCase` or domain noun | `lib/graphql/queries/components.ts` |
+| Rule | Convention | Example |
+|------|------------|---------|
+| Route folders | `kebab-case` | `(app)/components/[id]/page.tsx` |
+| React components | `PascalCase` filename | `ComponentListPage.tsx` |
+| Hooks | `camelCase`, `use` prefix | `useAuth.ts`, `useGraphQuery.ts` |
+| React Query domain hooks | `use{Domain}Query.ts` / `use{Domain}Mutation.ts` | `useAuthQuery.ts` |
+| GraphQL documents | domain noun, camelCase | `lib/graphql/documents/components.ts` |
+| Zod / form schemas | domain noun | `schema/component.ts` |
+| Column defs | `{entity}Columns.tsx` | `componentsColumns.tsx` |
 
-## Folder layout
+**Not** kebab-case for hooks — use `useAuth.ts`, not `use-auth.ts`.
 
-```
-frontend/
-├── README.md
-├── app/                          # Next.js App Router — routes only, thin pages
-│   ├── layout.tsx
-│   ├── page.tsx                  # dashboard / redirect
-│   ├── login/
-│   │   └── page.tsx
-│   ├── register/
-│   │   └── page.tsx
-│   └── components/
-│       ├── page.tsx              # list
-│       └── [id]/
-│           └── page.tsx          # detail
-├── components/                   # shared UI — PascalCase files
-│   ├── ComponentList.tsx
-│   ├── ComponentDetail.tsx
-│   ├── InventoryLogForm.tsx
-│   └── ui/                       # generic primitives (optional)
-│       └── Button.tsx
-├── hooks/                        # camelCase files
-│   ├── useAuth.ts
-│   ├── useComponents.ts
-│   └── useInventoryLog.ts
-├── lib/
-│   ├── graphql/
-│   │   ├── client.ts
-│   │   ├── queries/
-│   │   │   ├── components.ts
-│   │   │   └── categories.ts
-│   │   └── mutations/
-│   │       ├── auth.ts
-│   │       ├── components.ts
-│   │       └── inventoryLog.ts
-│   └── auth/
-│       └── tokenStorage.ts
-├── package.json
-└── ...
-```
+---
 
-## App Router (`app/`)
+## `components/` naming
 
-- **Pages stay thin** — import from `components/` and `hooks/`; minimal logic in `page.tsx`.
-- **Route folders** use `kebab-case`: `app/inventory-logs/` not `app/InventoryLogs/`.
-- **Dynamic segments**: `[id]`, `[componentId]` — camelCase inside brackets is fine.
+| Subfolder | Contents | Extension |
+|-----------|----------|-----------|
+| `ui/` | shadcn primitives | `.tsx` — match shadcn CLI output |
+| `includes/` | Reused composed widgets | `.tsx` — `DataTable.tsx`, `FormGenerator.tsx` |
+| `modules/{feature}/` | Page-level UI | `.tsx` — `{Feature}Page.tsx` |
 
-## Components (`components/`)
+- File name = default export name
+- shadcn files: do not rename CLI output casually (updates via `npx shadcn@latest add`)
 
-| Rule | Example |
-|------|---------|
-| File name = default export name | `ComponentList.tsx` → `export function ComponentList` |
-| One main component per file | Split large files when a screen grows |
-| Co-locate small helpers | `ComponentList.utils.ts` next to `ComponentList.tsx` if needed |
-| Shared primitives | `components/ui/Button.tsx` |
+---
 
-## Hooks (`hooks/`)
+## `schema/` naming
 
-| Rule | Example |
-|------|---------|
-| File name camelCase with `use` prefix | `useAuth.ts`, `useComponents.ts` |
-| One hook per file (primary) | `useAuth.ts` exports `useAuth` |
-| Hook returns typed object | `{ user, login, logout, loading, error }` |
-
-**Not** kebab-case (`use-auth.ts`) — use **`useAuth.ts`**.
-
-## GraphQL client (`lib/graphql/`)
-
-| Path | Contents |
+| File | Contains |
 |------|----------|
-| `client.ts` | GraphQL HTTP client, auth header injection |
-| `queries/*.ts` | Query strings + typed helpers |
-| `mutations/*.ts` | Mutation strings + typed helpers |
+| `auth.ts` | `loginSchema`, `registerSchema`, `loginFields: FormFieldDef[]` |
+| `component.ts` | `createComponentSchema`, field defs |
+| `category.ts` | `createCategorySchema`, field defs |
+| `inventoryLog.ts` | log form schemas per `InventoryLogType` |
 
-File names by domain: `components.ts`, `inventoryLog.ts`, `auth.ts`.
+---
 
-Operation names match backend API (camelCase): `applyInventoryLog`, `components`.
+## `react-query/` naming
 
-## Vite migration
+```
+react-query/
+  queries/
+    useAuthQuery.ts
+    useComponentsQuery.ts
+  mutations/
+    useAuthMutation.ts
+    useComponentsMutation.ts
+    useInventoryLogMutation.ts
+```
 
-When moving to Vite, reuse unchanged:
+One file per domain per operation kind. All use base hooks from `hooks/graphql/`.
 
-- `components/`
-- `hooks/`
-- `lib/`
+---
 
-Replace only the routing shell (`app/` → Vite router config + page components).
+## `DataTable/columns/` naming
 
-## Environment variables
+| File | Entity |
+|------|--------|
+| `componentsColumns.tsx` | Component list |
+| `categoriesColumns.tsx` | Category list |
 
-| Framework | Prefix | Example |
-|-----------|--------|---------|
-| Next.js (dev) | `NEXT_PUBLIC_` | `NEXT_PUBLIC_GRAPHQL_URL` |
-| Vite (prod) | `VITE_` | `VITE_GRAPHQL_URL` |
+Export: `{entity}Columns` constant (e.g. `componentsColumns`).
 
-Access via thin wrapper in `lib/config.ts` so the key name differs in one place only.
+---
+
+## App Router pages
+
+- **`page.tsx`** stays thin — delegate to `components/modules/`
+- Dynamic segments: `[id]` for UUID routes
+- Route groups use parentheses only: `(public)`, `(auth)`, `(app)` — not in URL
+
+---
+
+## Import aliases
+
+Use `@/` prefix (Next.js default with `src/`):
+
+```typescript
+import { DataTable } from "@/components/includes/DataTable/DataTable";
+import { useComponentsQuery } from "@/react-query/queries/useComponentsQuery";
+import { loginSchema } from "@/schema/auth";
+```
+
+---
 
 ## Related docs
 
-- Architecture and GraphQL usage: [`architecture.md`](./architecture.md)
-- API operation names: [`../backend/api-design.md`](../backend/api-design.md)
-- Backend file naming: [`../backend/naming-conventions.md`](../backend/naming-conventions.md)
+- Full tree: [`folder-structure.md`](./folder-structure.md)
+- Architecture: [`architecture.md`](./architecture.md)

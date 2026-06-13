@@ -73,6 +73,9 @@ uv sync --extra dev
 # 3. Migrations (first time)
 uv run aerich init-db
 
+# After changing app/models/, generate — do not edit migrations/ by hand:
+# uv run aerich migrate --name <description> && uv run aerich upgrade
+
 # 4. Run API + gRPC (separate terminals)
 uv run inventory-api
 uv run inventory-grpc

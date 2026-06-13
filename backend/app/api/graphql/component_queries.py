@@ -13,7 +13,9 @@ from app.api.graphql.component_types import (
     SortDirectionGQL,
 )
 from app.api.graphql.context import GraphQLContext
+from app.models import InventoryLogType
 from app.schemas.component import ComponentFilterInput, ComponentSortField, ComponentSortInput, PaginationInput, SortDirection
+from app.schemas.inventory_log import InventoryLogFilterInput
 from app.services import component as component_service
 from app.services import inventory_log as inventory_log_service
 
@@ -30,6 +32,7 @@ def _map_component(item) -> ComponentType:
         name=item.name,
         category_id=item.category_id,
         category_name=item.category_name,
+        low_stock_threshold=item.low_stock_threshold,
         datasheet_url=item.datasheet_url,
         total_qty=item.total_qty,
         box_quantities=[
@@ -40,12 +43,15 @@ def _map_component(item) -> ComponentType:
 
 
 def _map_log(item) -> InventoryLogTypeGQLObject:
+    log_type = item.type.value if hasattr(item.type, "value") else item.type
     return InventoryLogTypeGQLObject(
         id=item.id,
         component_id=item.component_id,
-        type=InventoryLogTypeGQL(item.type.value),
+        component_name=item.component_name,
+        type=InventoryLogTypeGQL(log_type),
         quantity=item.quantity,
         box=item.box,
+        from_box=item.from_box,
         reason=item.reason,
         related_log_id=item.related_log_id,
         created_at=item.created_at,
@@ -70,6 +76,25 @@ class ComponentFilterInputGQL:
 class PaginationInputGQL:
     limit: int = 20
     offset: int = 0
+
+
+@strawberry.input
+class InventoryLogFilterInputGQL:
+    search: str | None = None
+    type: InventoryLogTypeGQL | None = None
+    box: str | None = None
+    component_id: strawberry.ID | None = None
+
+
+def _map_log_filter(filter_input: InventoryLogFilterInputGQL | None) -> InventoryLogFilterInput | None:
+    if filter_input is None:
+        return None
+    return InventoryLogFilterInput(
+        search=filter_input.search,
+        type=InventoryLogType(filter_input.type.value) if filter_input.type else None,
+        box=filter_input.box,
+        component_id=filter_input.component_id,
+    )
 
 
 def _map_filter(filter_input: ComponentFilterInputGQL | None) -> ComponentFilterInput | None:
@@ -136,6 +161,27 @@ class ComponentQuery:
         result = await inventory_log_service.list_component_logs(
             user_id,
             component_id,
+            PaginationInput(limit=page.limit, offset=page.offset),
+        )
+        return InventoryLogConnection(
+            items=[_map_log(item) for item in result.items],
+            total_count=result.total_count,
+            limit=result.limit,
+            offset=result.offset,
+        )
+
+    @strawberry.field
+    async def inventory_logs(
+        self,
+        info: strawberry.Info[GraphQLContext],
+        filter: InventoryLogFilterInputGQL | None = None,
+        pagination: PaginationInputGQL | None = None,
+    ) -> InventoryLogConnection:
+        user_id = _require_user_id(info)
+        page = pagination or PaginationInputGQL()
+        result = await inventory_log_service.list_inventory_logs(
+            user_id,
+            _map_log_filter(filter),
             PaginationInput(limit=page.limit, offset=page.offset),
         )
         return InventoryLogConnection(

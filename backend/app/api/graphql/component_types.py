@@ -15,6 +15,7 @@ class InventoryLogTypeGQL(Enum):
     LOST = InventoryLogType.LOST.value
     BURN = InventoryLogType.BURN.value
     DEFECTIVE = InventoryLogType.DEFECTIVE.value
+    REALLOCATE = InventoryLogType.REALLOCATE.value
 
 
 @strawberry.enum
@@ -43,6 +44,7 @@ class ComponentType:
     name: str
     category_id: UUID
     category_name: str
+    low_stock_threshold: int
     datasheet_url: str | None
     total_qty: int
     box_quantities: list[BoxQuantityType]
@@ -61,9 +63,11 @@ class ComponentConnection:
 class InventoryLogTypeGQLObject:
     id: UUID
     component_id: UUID
+    component_name: str | None
     type: InventoryLogTypeGQL
     quantity: int
     box: str
+    from_box: str | None
     reason: str | None
     related_log_id: UUID | None
     created_at: datetime

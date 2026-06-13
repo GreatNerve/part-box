@@ -8,14 +8,17 @@ GraphQL schema conventions and operation shapes for v1. gRPC proto mirrors these
 
 | Topic | Choice |
 |-------|--------|
-| Inventory log mutations | Single `applyInventoryLog` with `InventoryLogType` enum |
+| Inventory log mutations | Single `applyInventoryLog` with `InventoryLogType` enum (+ **`REALLOCATE`** v1.1) |
 | Errors | Union payload for expected business failures; GraphQL `errors` for auth/server faults |
 | Pagination | Offset — `limit` + `offset` |
-| List filters | Input objects — `ComponentFilterInput`, `PaginationInput` |
+| List filters | Input objects — `ComponentFilterInput`, `InventoryLogFilterInput`, `PaginationInput` |
 | Sort | `ComponentSortInput` nested inside filter |
 | IDs | UUID in API and as Postgres primary keys on all tables |
 | Auth identity | Email + password (unique email) |
 | Naming | camelCase throughout GraphQL |
+| Low stock | Per-category `lowStockThreshold` on `Category` (v1.1) |
+| Grouping | Optional `groupName` on `Component` (v1.1) |
+| Resource link | `resourceUrl` (alias `datasheetUrl` until migration) — URL only |
 
 ---
 
@@ -29,6 +32,7 @@ enum InventoryLogType {
   LOST
   BURN
   DEFECTIVE
+  REALLOCATE          # v1.1 — move qty between boxes, total unchanged
 }
 
 enum ComponentSortField {
@@ -48,7 +52,9 @@ type Component {
   name: String!
   categoryId: ID!
   categoryName: String!
-  datasheetUrl: String
+  groupName: String              # v1.1 — optional list grouping
+  resourceUrl: String            # v1.1 — was datasheetUrl; URL only
+  lowStockThreshold: Int!        # v1.1 — from category, denormalized for list UI
   totalQty: Int!
   boxQuantities: [BoxQuantity!]!
   updatedAt: DateTime!
@@ -62,11 +68,13 @@ type BoxQuantity {
 type InventoryLog {
   id: ID!
   componentId: ID!
+  componentName: String          # v1.1 — populated on central log query
   type: InventoryLogType!
   quantity: Int!
-  box: String!
+  box: String!                   # primary box; for REALLOCATE = toBox
+  fromBox: String                # v1.1 — REALLOCATE only
   reason: String
-  relatedLogId: ID          # set on RETURN → links USE log
+  relatedLogId: ID               # set on RETURN → links USE log
   createdAt: DateTime!
 }
 
@@ -74,6 +82,7 @@ type Category {
   id: ID!
   name: String!
   isDefault: Boolean!
+  lowStockThreshold: Int!        # v1.1 — low stock when 0 < totalQty < threshold
 }
 
 type User {
@@ -153,6 +162,25 @@ All filter fields optional. Combined with AND semantics (search + category + box
 | `components` | `filter`, `pagination` | `ComponentConnection!` |
 | `component` | `id: ID!` | `Component` (nullable if not found / not owned) |
 | `componentLogs` | `componentId: ID!`, `pagination` | `InventoryLogConnection!` |
+| **`inventoryLogs`** | **`filter`, `pagination`** | **`InventoryLogConnection!`** (v1.1 — all user logs) |
+
+```graphql
+input InventoryLogFilterInput {
+  search: String                 # component name substring
+  type: InventoryLogType
+  box: String
+  componentId: ID
+}
+```
+
+Query:
+
+```graphql
+inventoryLogs(
+  filter: InventoryLogFilterInput
+  pagination: PaginationInput
+): InventoryLogConnection!
+```
 
 `component` includes nested `boxQuantities`. Logs fetched via `componentLogs` or nested field on detail — pick one in implementation; both may expose same data.
 
@@ -193,20 +221,22 @@ Auth mutations return payload directly or use union — implementation may use s
 input CreateComponentInput {
   name: String!
   categoryId: ID!
-  datasheetUrl: String
-  initialBoxQuantities: [BoxQuantityInput!]   # optional at create
-}
-
-input BoxQuantityInput {
-  box: String!
-  quantity: Int!
+  groupName: String              # v1.1 optional
+  resourceUrl: String            # v1.1 optional (alias datasheetUrl)
+  initialBoxQuantities: [BoxQuantityInput!]
 }
 
 input UpdateComponentInput {
   id: ID!
   name: String
   categoryId: ID
-  datasheetUrl: String
+  groupName: String
+  resourceUrl: String
+}
+
+input BoxQuantityInput {
+  box: String!
+  quantity: Int!
 }
 
 type Mutation {
@@ -223,10 +253,18 @@ Initial box quantities at create still produce **ADD_STOCK** logs internally (or
 ```graphql
 input CreateCategoryInput {
   name: String!
+  lowStockThreshold: Int = 5
+}
+
+input UpdateCategoryInput {
+  id: ID!
+  name: String
+  lowStockThreshold: Int
 }
 
 type Mutation {
   createCategory(input: CreateCategoryInput!): CreateCategoryResult!
+  updateCategory(input: UpdateCategoryInput!): UpdateCategoryResult!
 }
 ```
 
@@ -239,9 +277,10 @@ input ApplyInventoryLogInput {
   componentId: ID!
   type: InventoryLogType!
   quantity: Int!                # always positive; direction implied by type
-  box: String!
+  box: String!                    # destination box; for most types the only box
+  fromBox: String                 # required when type = REALLOCATE
   reason: String
-  relatedLogId: ID              # required when type = RETURN (USE log id)
+  relatedLogId: ID                # required when type = RETURN (USE log id)
 }
 
 type ApplyInventoryLogSuccess {
@@ -264,6 +303,7 @@ type Mutation {
 | `LOST` | −qty in box | must not go negative |
 | `BURN` | −qty in box | must not go negative |
 | `DEFECTIVE` | −qty in box | must not go negative |
+| **`REALLOCATE`** | **−qty in `fromBox`, +qty in `box` (toBox)** | **`fromBox` required; total qty unchanged; atomic** |
 
 Frontend "Return" button on a USE log calls:
 

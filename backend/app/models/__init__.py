@@ -24,6 +24,7 @@ class Category(models.Model):
     user = fields.ForeignKeyField("models.User", related_name="categories")
     name = fields.CharField(max_length=255)
     is_default = fields.BooleanField(default=False)
+    low_stock_threshold = fields.IntField(default=5)
     created_at = fields.DatetimeField(auto_now_add=True)
 
     components: fields.ReverseRelation["Component"]
@@ -68,6 +69,7 @@ class InventoryLogType(str, enum.Enum):
     LOST = "LOST"
     BURN = "BURN"
     DEFECTIVE = "DEFECTIVE"
+    REALLOCATE = "REALLOCATE"
 
 
 class InventoryLog(models.Model):
@@ -77,6 +79,7 @@ class InventoryLog(models.Model):
     type = fields.CharEnumField(InventoryLogType, max_length=32)
     quantity = fields.IntField()
     box = fields.CharField(max_length=255)
+    from_box = fields.CharField(max_length=255, null=True)
     reason = fields.TextField(null=True)
     related_log = fields.ForeignKeyField(
         "models.InventoryLog",

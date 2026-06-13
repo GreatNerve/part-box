@@ -132,13 +132,23 @@ Run with pytest from `backend/` root.
 
 ## Migrations
 
-Aerich default — do not rename manually:
+Aerich default — **generate only; do not create or edit migration files manually**:
 
 ```
 migrations/
 └── models/
-    └── {timestamp}_{description}.py
+    └── {timestamp}_{description}.py   # written by `aerich migrate`
 ```
+
+Workflow after model changes:
+
+```bash
+cd backend
+uv run aerich migrate --name <description>
+uv run aerich upgrade
+```
+
+Do not rename migration files manually — Aerich tracks them by filename and order.
 
 ## Docker / config (repo root)
 

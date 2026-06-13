@@ -37,5 +37,9 @@ Thumbs.db
 # Docker
 docker/.env
 
-# Generated (optional — uncomment if stubs are build-time only)
-# backend/app/grpc/gen/
+# graphify — commit graph.json + GRAPH_REPORT.md; ignore local/cache
+graphify-out/cache/
+graphify-out/.graphify_python
+graphify-out/.graphify_root
+graphify-out/cost.json
+

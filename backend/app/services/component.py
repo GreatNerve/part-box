@@ -27,6 +27,7 @@ async def component_to_dto(component: Component) -> ComponentDTO:
         name=component.name,
         category_id=component.category_id,
         category_name=component.category.name,
+        low_stock_threshold=component.category.low_stock_threshold,
         datasheet_url=component.datasheet_url,
         total_qty=sum(row.quantity for row in box_quantities),
         box_quantities=box_quantities,

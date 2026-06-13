@@ -17,6 +17,7 @@ class ComponentDTO(BaseModel):
     name: str
     category_id: UUID
     category_name: str
+    low_stock_threshold: int
     datasheet_url: str | None = None
     total_qty: int
     box_quantities: list[BoxQuantityDTO]

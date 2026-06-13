@@ -1,0 +1,747 @@
+{
+  "D:\\@2026\\RPC_Test\\backend\\app\\__init__.py": {
+    "mtime": 1781373270.047112,
+    "ast_hash": "7e5dd7a89c2a9287254cf8232200bbe5",
+    "semantic_hash": "7e5dd7a89c2a9287254cf8232200bbe5"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\api\\graphql\\auth_mutations.py": {
+    "mtime": 1781373695.6326928,
+    "ast_hash": "65099408c14f797b1b8ab9477745af12",
+    "semantic_hash": "65099408c14f797b1b8ab9477745af12"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\api\\graphql\\auth_types.py": {
+    "mtime": 1781373295.6095157,
+    "ast_hash": "f526d38199d956ccf53cb8e287f8bfa5",
+    "semantic_hash": "f526d38199d956ccf53cb8e287f8bfa5"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\api\\graphql\\category_mutations.py": {
+    "mtime": 1781379907.189765,
+    "ast_hash": "7a9d9f64bf1959dfd5ef36db9e12001d",
+    "semantic_hash": "7a9d9f64bf1959dfd5ef36db9e12001d"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\api\\graphql\\category_queries.py": {
+    "mtime": 1781379907.026422,
+    "ast_hash": "acd140993eecf09ab996987a740e87e7",
+    "semantic_hash": "acd140993eecf09ab996987a740e87e7"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\api\\graphql\\component_mutations.py": {
+    "mtime": 1781373876.5407326,
+    "ast_hash": "ffad2f40b60001a4fbd5402c43946e88",
+    "semantic_hash": "ffad2f40b60001a4fbd5402c43946e88"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\api\\graphql\\component_queries.py": {
+    "mtime": 1781379907.1117792,
+    "ast_hash": "f13ea2db8cab9003bd723d873a8c8a3e",
+    "semantic_hash": "f13ea2db8cab9003bd723d873a8c8a3e"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\api\\graphql\\component_types.py": {
+    "mtime": 1781379907.0801797,
+    "ast_hash": "115e60ecaa1a8b8019379d95e427f4dc",
+    "semantic_hash": "115e60ecaa1a8b8019379d95e427f4dc"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\api\\graphql\\context.py": {
+    "mtime": 1781373932.2410293,
+    "ast_hash": "0112ad50349e195cae467fb20325d611",
+    "semantic_hash": "0112ad50349e195cae467fb20325d611"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\api\\graphql\\inventory_log_mutations.py": {
+    "mtime": 1781379907.1599636,
+    "ast_hash": "f009090bd9d6f2d0badd07f8cc84a299",
+    "semantic_hash": "f009090bd9d6f2d0badd07f8cc84a299"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\api\\graphql\\schema.py": {
+    "mtime": 1781373860.144624,
+    "ast_hash": "d45d81bc8a8f0dc489c5d960473f3a2d",
+    "semantic_hash": "d45d81bc8a8f0dc489c5d960473f3a2d"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\api\\main.py": {
+    "mtime": 1781373299.8956711,
+    "ast_hash": "f156971c6327f16e36e51b0f13667cfd",
+    "semantic_hash": "f156971c6327f16e36e51b0f13667cfd"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\core\\auth.py": {
+    "mtime": 1781373421.1237645,
+    "ast_hash": "8674939a2d08b8bb72853e0b636b1a8a",
+    "semantic_hash": "8674939a2d08b8bb72853e0b636b1a8a"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\core\\constants.py": {
+    "mtime": 1781379906.6600132,
+    "ast_hash": "877bb81ca9fcb8b987975092a83d2d40",
+    "semantic_hash": "877bb81ca9fcb8b987975092a83d2d40"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\core\\db.py": {
+    "mtime": 1781373271.1500244,
+    "ast_hash": "6741ac975a5c2a71320e0e9901fa821b",
+    "semantic_hash": "6741ac975a5c2a71320e0e9901fa821b"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\core\\settings.py": {
+    "mtime": 1781373421.3407326,
+    "ast_hash": "3ef7711a220790e65acd45d26f0d3a40",
+    "semantic_hash": "3ef7711a220790e65acd45d26f0d3a40"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\grpc\\gen\\__init__.py": {
+    "mtime": 1781373306.0676744,
+    "ast_hash": "2e89fe37732228615351313704d1d6d5",
+    "semantic_hash": "2e89fe37732228615351313704d1d6d5"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\grpc\\server.py": {
+    "mtime": 1781373305.8368702,
+    "ast_hash": "e87f10fec6c9ba6b2352b2508bdc7e88",
+    "semantic_hash": "e87f10fec6c9ba6b2352b2508bdc7e88"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\grpc\\servicers\\__init__.py": {
+    "mtime": 1781373305.9640818,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\models\\__init__.py": {
+    "mtime": 1781379906.6875508,
+    "ast_hash": "3e56c3e06aa81df3d11c749b07e4424f",
+    "semantic_hash": "3e56c3e06aa81df3d11c749b07e4424f"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\schemas\\category.py": {
+    "mtime": 1781379906.7196171,
+    "ast_hash": "60ff60971f3afb6b116034e683d159cb",
+    "semantic_hash": "60ff60971f3afb6b116034e683d159cb"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\schemas\\component.py": {
+    "mtime": 1781379906.7464614,
+    "ast_hash": "d35b080f22628572f0fab8852f05535c",
+    "semantic_hash": "d35b080f22628572f0fab8852f05535c"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\schemas\\inventory_log.py": {
+    "mtime": 1781379906.7765052,
+    "ast_hash": "9903db8fc3c66d354d03f7d9ea73a1cf",
+    "semantic_hash": "9903db8fc3c66d354d03f7d9ea73a1cf"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\schemas\\user.py": {
+    "mtime": 1781373277.9312806,
+    "ast_hash": "adeff1805a8620231cdaf4265695b9c7",
+    "semantic_hash": "adeff1805a8620231cdaf4265695b9c7"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\services\\auth.py": {
+    "mtime": 1781379906.838526,
+    "ast_hash": "e97bedf133e2ef7793476d659848a735",
+    "semantic_hash": "e97bedf133e2ef7793476d659848a735"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\services\\category.py": {
+    "mtime": 1781379906.8901167,
+    "ast_hash": "b558a4b1ea72599cbec7c6336e58a5de",
+    "semantic_hash": "b558a4b1ea72599cbec7c6336e58a5de"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\services\\component.py": {
+    "mtime": 1781379906.9224007,
+    "ast_hash": "a1757697ce9c3be0fb5f68212934bcfb",
+    "semantic_hash": "a1757697ce9c3be0fb5f68212934bcfb"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\app\\services\\inventory_log.py": {
+    "mtime": 1781379906.964961,
+    "ast_hash": "f69b61167511c651c3be60bdfe69d07a",
+    "semantic_hash": "f69b61167511c651c3be60bdfe69d07a"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\migrations\\models\\0_20260613232943_init.py": {
+    "mtime": 1781373604.8921883,
+    "ast_hash": "2691a0b6c445f4f0b422b9cbe23e0d1b",
+    "semantic_hash": "2691a0b6c445f4f0b422b9cbe23e0d1b"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\migrations\\models\\1_20260614011303_v11_low_stock_reallocate.py": {
+    "mtime": 1781379783.7996058,
+    "ast_hash": "9d1481866d1fedb3ca985a44cb6201f0",
+    "semantic_hash": "9d1481866d1fedb3ca985a44cb6201f0"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\scripts\\generate_proto.sh": {
+    "mtime": 1781373305.1018715,
+    "ast_hash": "46a825d14f6187c544661abcaeb60329",
+    "semantic_hash": "46a825d14f6187c544661abcaeb60329"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\scripts\\test_user_flow.py": {
+    "mtime": 1781373887.0058067,
+    "ast_hash": "ef15a0bb3811cca3576739bfef65c1d8",
+    "semantic_hash": "ef15a0bb3811cca3576739bfef65c1d8"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\tests\\conftest.py": {
+    "mtime": 1781373876.8833036,
+    "ast_hash": "ffe673779bf40dd619ed9a7b8cef97c8",
+    "semantic_hash": "ffe673779bf40dd619ed9a7b8cef97c8"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\tests\\integration\\api\\test_health.py": {
+    "mtime": 1781373322.6764956,
+    "ast_hash": "e6bbf6a5f6af80a93d91a52df9505c05",
+    "semantic_hash": "e6bbf6a5f6af80a93d91a52df9505c05"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\tests\\integration\\test_full_user_flow.py": {
+    "mtime": 1781373985.4886515,
+    "ast_hash": "c407d50ffa4bb2e6ece2d16c06fe5d80",
+    "semantic_hash": "c407d50ffa4bb2e6ece2d16c06fe5d80"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\tests\\unit\\core\\test_auth.py": {
+    "mtime": 1781373311.0922673,
+    "ast_hash": "12eab2840eea6106801ee118b56d935d",
+    "semantic_hash": "12eab2840eea6106801ee118b56d935d"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\tests\\unit\\core\\test_settings.py": {
+    "mtime": 1781373311.4135013,
+    "ast_hash": "df11b3d876a855f32febb4705282dadb",
+    "semantic_hash": "df11b3d876a855f32febb4705282dadb"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\codegen.ts": {
+    "mtime": 1781379907.389885,
+    "ast_hash": "5ef38677c88ee7c385455dda025cfcd4",
+    "semantic_hash": "5ef38677c88ee7c385455dda025cfcd4"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\components.json": {
+    "mtime": 1781376762.2324564,
+    "ast_hash": "794998c7b7f6007535d165c4a579d8ad",
+    "semantic_hash": "794998c7b7f6007535d165c4a579d8ad"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\eslint.config.mjs": {
+    "mtime": 1781375968.6697476,
+    "ast_hash": "dfa1f5f6a7037bf39dc510f30b180002",
+    "semantic_hash": "dfa1f5f6a7037bf39dc510f30b180002"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\next-env.d.ts": {
+    "mtime": 1781378295.9740667,
+    "ast_hash": "d0f8375ae1199dc7acd3977fc33b78b8",
+    "semantic_hash": "d0f8375ae1199dc7acd3977fc33b78b8"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\next.config.ts": {
+    "mtime": 1781375968.682298,
+    "ast_hash": "9b77af189a21a7a64e4bd7a426f64176",
+    "semantic_hash": "9b77af189a21a7a64e4bd7a426f64176"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\package.json": {
+    "mtime": 1781379907.243201,
+    "ast_hash": "cbccb8db22fe744043f02433fc1bf6da",
+    "semantic_hash": "cbccb8db22fe744043f02433fc1bf6da"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\postcss.config.mjs": {
+    "mtime": 1781375968.6729188,
+    "ast_hash": "239f3ebf717465dc636818a1a619398d",
+    "semantic_hash": "239f3ebf717465dc636818a1a619398d"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\app\\(app)\\categories\\page.tsx": {
+    "mtime": 1781379908.146377,
+    "ast_hash": "23de55243ed6342ec05ae7e50555a013",
+    "semantic_hash": "23de55243ed6342ec05ae7e50555a013"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\app\\(app)\\components\\[id]\\page.tsx": {
+    "mtime": 1781379908.118436,
+    "ast_hash": "7bf31237301e509e89ee6178c7f8eb22",
+    "semantic_hash": "7bf31237301e509e89ee6178c7f8eb22"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\app\\(app)\\components\\page.tsx": {
+    "mtime": 1781379908.1004124,
+    "ast_hash": "041a9c1f5e865ca421a22e2cf34ae3bd",
+    "semantic_hash": "041a9c1f5e865ca421a22e2cf34ae3bd"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\app\\(app)\\layout.tsx": {
+    "mtime": 1781379908.0755355,
+    "ast_hash": "950229a69985c51398f9950a0a1dce9b",
+    "semantic_hash": "950229a69985c51398f9950a0a1dce9b"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\app\\(app)\\settings\\page.tsx": {
+    "mtime": 1781379908.164194,
+    "ast_hash": "2696c5f2e4555378d51fda033816e6e6",
+    "semantic_hash": "2696c5f2e4555378d51fda033816e6e6"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\app\\(public)\\(auth)\\login\\page.tsx": {
+    "mtime": 1781379908.0337813,
+    "ast_hash": "9985c09d7273dba38b4b7e22d85d43dc",
+    "semantic_hash": "9985c09d7273dba38b4b7e22d85d43dc"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\app\\(public)\\(auth)\\register\\page.tsx": {
+    "mtime": 1781379908.057964,
+    "ast_hash": "3537b20b201f7d100bd0850f8be017b7",
+    "semantic_hash": "3537b20b201f7d100bd0850f8be017b7"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\app\\api\\auth\\[...nextauth]\\route.ts": {
+    "mtime": 1781379907.475672,
+    "ast_hash": "d55cabaa8b822c3af5ed2a61211a5c89",
+    "semantic_hash": "d55cabaa8b822c3af5ed2a61211a5c89"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\app\\layout.tsx": {
+    "mtime": 1781379907.9949799,
+    "ast_hash": "70832264b8c0ee713b5e46865138b44b",
+    "semantic_hash": "70832264b8c0ee713b5e46865138b44b"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\app\\page.tsx": {
+    "mtime": 1781379907.9703596,
+    "ast_hash": "504d128de2f511669781ff06313b83b0",
+    "semantic_hash": "504d128de2f511669781ff06313b83b0"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\auth\\auth.config.ts": {
+    "mtime": 1781379907.4343374,
+    "ast_hash": "9c84d9a703965cad0c05e1e1fa74344d",
+    "semantic_hash": "9c84d9a703965cad0c05e1e1fa74344d"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\auth\\auth.ts": {
+    "mtime": 1781379907.45885,
+    "ast_hash": "041e7f203eb46c90947eae8ac33cf2a4",
+    "semantic_hash": "041e7f203eb46c90947eae8ac33cf2a4"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\includes\\BoxSuggestionPicker\\BoxSuggestionPicker.tsx": {
+    "mtime": 1781379908.3907073,
+    "ast_hash": "c792d92e0ae93646f23536ca718869c5",
+    "semantic_hash": "c792d92e0ae93646f23536ca718869c5"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\includes\\BoxSuggestionPicker\\index.ts": {
+    "mtime": 1781379908.4217587,
+    "ast_hash": "2dee9ccfd7b23dc5cdca57e4cf77bc96",
+    "semantic_hash": "2dee9ccfd7b23dc5cdca57e4cf77bc96"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\includes\\DataTable\\DataTable.tsx": {
+    "mtime": 1781379907.7400172,
+    "ast_hash": "f40a6eb972fc564b84a8aecec69f7940",
+    "semantic_hash": "f40a6eb972fc564b84a8aecec69f7940"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\includes\\DataTable\\index.ts": {
+    "mtime": 1781379907.7220304,
+    "ast_hash": "399564e6bf348726f8598372134b0144",
+    "semantic_hash": "399564e6bf348726f8598372134b0144"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\includes\\DialogForm\\DialogForm.tsx": {
+    "mtime": 1781379907.6855054,
+    "ast_hash": "1e5fc9371ab0ed3cf90fdb00b432b868",
+    "semantic_hash": "1e5fc9371ab0ed3cf90fdb00b432b868"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\includes\\DialogForm\\index.ts": {
+    "mtime": 1781379907.703667,
+    "ast_hash": "4320625f24c35a2f315679cd32836427",
+    "semantic_hash": "4320625f24c35a2f315679cd32836427"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\includes\\FormGenerator\\FormGenerator.tsx": {
+    "mtime": 1781379907.673346,
+    "ast_hash": "ddee701c71b3aaa63c5aa8b1d6496d06",
+    "semantic_hash": "ddee701c71b3aaa63c5aa8b1d6496d06"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\includes\\FormGenerator\\index.ts": {
+    "mtime": 1781379907.6502187,
+    "ast_hash": "2798989e080438be6fe7be0deb756e05",
+    "semantic_hash": "2798989e080438be6fe7be0deb756e05"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\includes\\layout\\ContentPanel.tsx": {
+    "mtime": 1781379908.3642073,
+    "ast_hash": "9e27d9711df85f69aa5cf24b5aa920d0",
+    "semantic_hash": "9e27d9711df85f69aa5cf24b5aa920d0"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\includes\\layout\\PageHeader.tsx": {
+    "mtime": 1781379908.2555783,
+    "ast_hash": "669a53b8f98fb83fd347f45ae26e5a30",
+    "semantic_hash": "669a53b8f98fb83fd347f45ae26e5a30"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\includes\\layout\\PageShell.tsx": {
+    "mtime": 1781379908.2858496,
+    "ast_hash": "a975214106b93f567c8a684fdb2d36ec",
+    "semantic_hash": "a975214106b93f567c8a684fdb2d36ec"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\includes\\layout\\StatCard.tsx": {
+    "mtime": 1781379908.3236797,
+    "ast_hash": "e50d979f92ddecbc775d0bb194322f5d",
+    "semantic_hash": "e50d979f92ddecbc775d0bb194322f5d"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\modules\\auth\\LoginForm.tsx": {
+    "mtime": 1781379907.8327484,
+    "ast_hash": "49728558f8cceaca33569ee8c325f4c4",
+    "semantic_hash": "49728558f8cceaca33569ee8c325f4c4"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\modules\\auth\\RegisterForm.tsx": {
+    "mtime": 1781379907.8491137,
+    "ast_hash": "07f8760d0305fd6d22f4538c8145018c",
+    "semantic_hash": "07f8760d0305fd6d22f4538c8145018c"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\modules\\categories\\CategoriesPage.tsx": {
+    "mtime": 1781379907.916185,
+    "ast_hash": "00865c6763cd427daefb76e5b1385917",
+    "semantic_hash": "00865c6763cd427daefb76e5b1385917"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\modules\\components\\ComponentDetailPage.tsx": {
+    "mtime": 1781379907.89158,
+    "ast_hash": "79ff48e7b3a4190dc361174426eeb0a3",
+    "semantic_hash": "79ff48e7b3a4190dc361174426eeb0a3"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\modules\\components\\ComponentsPage.tsx": {
+    "mtime": 1781379907.8648565,
+    "ast_hash": "971056e4812a41c0c78ab09d03e9e9de",
+    "semantic_hash": "971056e4812a41c0c78ab09d03e9e9de"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\modules\\components\\InventoryLogDialog.tsx": {
+    "mtime": 1781379908.449384,
+    "ast_hash": "cf42b5f9c34c50121590c608a8bdeba5",
+    "semantic_hash": "cf42b5f9c34c50121590c608a8bdeba5"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\modules\\layout\\AppSidebar.tsx": {
+    "mtime": 1781379907.808509,
+    "ast_hash": "27ca1e72b6b25f5877e560dfbb75631d",
+    "semantic_hash": "27ca1e72b6b25f5877e560dfbb75631d"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\modules\\layout\\ThemeToggle.tsx": {
+    "mtime": 1781379907.7869942,
+    "ast_hash": "f1f981697792f857b0987beebd1da2e5",
+    "semantic_hash": "f1f981697792f857b0987beebd1da2e5"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\modules\\settings\\SettingsPage.tsx": {
+    "mtime": 1781379907.9422667,
+    "ast_hash": "95b8f37fa67dfc0d07c23f310fae9318",
+    "semantic_hash": "95b8f37fa67dfc0d07c23f310fae9318"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\providers.tsx": {
+    "mtime": 1781379907.766588,
+    "ast_hash": "a6e5d1129ee270d2c6f627037e57b65b",
+    "semantic_hash": "a6e5d1129ee270d2c6f627037e57b65b"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\alert.tsx": {
+    "mtime": 1781376702.926308,
+    "ast_hash": "22774bacf208321ee2be29275e37e77b",
+    "semantic_hash": "22774bacf208321ee2be29275e37e77b"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\avatar.tsx": {
+    "mtime": 1781376702.6595397,
+    "ast_hash": "8b41492907a73176027427a3f0fd2302",
+    "semantic_hash": "8b41492907a73176027427a3f0fd2302"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\badge.tsx": {
+    "mtime": 1781376701.9693587,
+    "ast_hash": "e4ec840217040d5630ee6ed7213a1d72",
+    "semantic_hash": "e4ec840217040d5630ee6ed7213a1d72"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\button.tsx": {
+    "mtime": 1781376701.322153,
+    "ast_hash": "9f8174e21759b5eac561dfef26977906",
+    "semantic_hash": "9f8174e21759b5eac561dfef26977906"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\card.tsx": {
+    "mtime": 1781376701.826463,
+    "ast_hash": "b46343849c6979746bd2ce95ea312abb",
+    "semantic_hash": "b46343849c6979746bd2ce95ea312abb"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\dialog.tsx": {
+    "mtime": 1781379908.4863358,
+    "ast_hash": "14af7e6a18702525e050392de091c6ec",
+    "semantic_hash": "14af7e6a18702525e050392de091c6ec"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\dropdown-menu.tsx": {
+    "mtime": 1781376702.535077,
+    "ast_hash": "4e917539a332e3394fdd12d33bec71ab",
+    "semantic_hash": "4e917539a332e3394fdd12d33bec71ab"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\empty.tsx": {
+    "mtime": 1781376703.0428276,
+    "ast_hash": "842387b48e037b90a58790f0a378040c",
+    "semantic_hash": "842387b48e037b90a58790f0a378040c"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\field.tsx": {
+    "mtime": 1781376703.8427718,
+    "ast_hash": "7c12c7933c22c968829c60bd03bf07b1",
+    "semantic_hash": "7c12c7933c22c968829c60bd03bf07b1"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\input.tsx": {
+    "mtime": 1781376701.4425547,
+    "ast_hash": "cd09dd950511042f1fe8374088cfa052",
+    "semantic_hash": "cd09dd950511042f1fe8374088cfa052"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\label.tsx": {
+    "mtime": 1781376701.5761037,
+    "ast_hash": "a70440da86bfc6a07f15197cca48cb08",
+    "semantic_hash": "a70440da86bfc6a07f15197cca48cb08"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\select.tsx": {
+    "mtime": 1781376702.325909,
+    "ast_hash": "008c0600b0203e520e9ebf0f181c1ec6",
+    "semantic_hash": "008c0600b0203e520e9ebf0f181c1ec6"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\separator.tsx": {
+    "mtime": 1781376702.211649,
+    "ast_hash": "3de2dca3e47ab29c4b1f632671545628",
+    "semantic_hash": "3de2dca3e47ab29c4b1f632671545628"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\sheet.tsx": {
+    "mtime": 1781376703.680024,
+    "ast_hash": "b169c0b79a37587bf9428ca2bf91b0cd",
+    "semantic_hash": "b169c0b79a37587bf9428ca2bf91b0cd"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\sidebar.tsx": {
+    "mtime": 1781376704.030308,
+    "ast_hash": "346bf12a4aec57a4545712b3a7f30aba",
+    "semantic_hash": "346bf12a4aec57a4545712b3a7f30aba"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\skeleton.tsx": {
+    "mtime": 1781376702.0421438,
+    "ast_hash": "0e6e825c43d858d98c9903f4da975382",
+    "semantic_hash": "0e6e825c43d858d98c9903f4da975382"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\sonner.tsx": {
+    "mtime": 1781376702.1422741,
+    "ast_hash": "f46214bc2a6a5153a6e04fad523d5587",
+    "semantic_hash": "f46214bc2a6a5153a6e04fad523d5587"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\spinner.tsx": {
+    "mtime": 1781376703.188653,
+    "ast_hash": "fd059d59ffd918b682307fc84fcb38e8",
+    "semantic_hash": "fd059d59ffd918b682307fc84fcb38e8"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\table.tsx": {
+    "mtime": 1781376701.7096682,
+    "ast_hash": "44f87727e60080863edb00fdd2fcd8da",
+    "semantic_hash": "44f87727e60080863edb00fdd2fcd8da"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\tabs.tsx": {
+    "mtime": 1781376702.7761214,
+    "ast_hash": "a09657e50866c31b53a2129ed2a36a82",
+    "semantic_hash": "a09657e50866c31b53a2129ed2a36a82"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\textarea.tsx": {
+    "mtime": 1781376702.3926585,
+    "ast_hash": "69ec66b8dde852cc89c1217075253d87",
+    "semantic_hash": "69ec66b8dde852cc89c1217075253d87"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\components\\ui\\tooltip.tsx": {
+    "mtime": 1781376703.309234,
+    "ast_hash": "6566a444ce6c0a87d6611903430534fa",
+    "semantic_hash": "6566a444ce6c0a87d6611903430534fa"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\hooks\\graphql\\useGraphMutation.ts": {
+    "mtime": 1781379907.5359385,
+    "ast_hash": "68f704e26a1c0d63599bd33f66e3a064",
+    "semantic_hash": "68f704e26a1c0d63599bd33f66e3a064"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\hooks\\graphql\\useGraphQuery.ts": {
+    "mtime": 1781379907.5158036,
+    "ast_hash": "c9a104768acc60091d419f3f748f0beb",
+    "semantic_hash": "c9a104768acc60091d419f3f748f0beb"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\hooks\\use-mobile.ts": {
+    "mtime": 1781376703.3876655,
+    "ast_hash": "209b5193af16624cdd89d3591480dd48",
+    "semantic_hash": "209b5193af16624cdd89d3591480dd48"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\hooks\\useMediaQuery.ts": {
+    "mtime": 1781379907.5581784,
+    "ast_hash": "6b875b2618baddd9d9326170031cbe1e",
+    "semantic_hash": "6b875b2618baddd9d9326170031cbe1e"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\lib\\config.ts": {
+    "mtime": 1781379907.2864287,
+    "ast_hash": "49fd1f6739571bde7c633fcfc284f765",
+    "semantic_hash": "49fd1f6739571bde7c633fcfc284f765"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\lib\\graphql\\client.ts": {
+    "mtime": 1781379907.3169062,
+    "ast_hash": "64632e0c65c683b7112a91324788adb6",
+    "semantic_hash": "64632e0c65c683b7112a91324788adb6"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\lib\\graphql\\documents\\index.ts": {
+    "mtime": 1781379907.3625987,
+    "ast_hash": "f63f46ddba2abf2efe213e3ad54e5f49",
+    "semantic_hash": "f63f46ddba2abf2efe213e3ad54e5f49"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\lib\\graphql\\errors.ts": {
+    "mtime": 1781379907.3409278,
+    "ast_hash": "2d6051bc29b2fc8b0d18e703495ce322",
+    "semantic_hash": "2d6051bc29b2fc8b0d18e703495ce322"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\lib\\utils.ts": {
+    "mtime": 1781379907.2612453,
+    "ast_hash": "d9837f38cc05303254571985e3164050",
+    "semantic_hash": "d9837f38cc05303254571985e3164050"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\middleware.ts": {
+    "mtime": 1781379907.4976363,
+    "ast_hash": "f5f171b156691f8d1b5797efa61104ee",
+    "semantic_hash": "f5f171b156691f8d1b5797efa61104ee"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\react-query\\mutations\\index.ts": {
+    "mtime": 1781379907.612729,
+    "ast_hash": "c78a3b483e9e5ba0128de0850889acd0",
+    "semantic_hash": "c78a3b483e9e5ba0128de0850889acd0"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\react-query\\provider.tsx": {
+    "mtime": 1781379907.5735283,
+    "ast_hash": "871742553b8285e7cd0154289582576a",
+    "semantic_hash": "871742553b8285e7cd0154289582576a"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\react-query\\queries\\index.ts": {
+    "mtime": 1781379907.5905023,
+    "ast_hash": "abd22c702af0e26ca09848cda679ac2c",
+    "semantic_hash": "abd22c702af0e26ca09848cda679ac2c"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\schema\\index.ts": {
+    "mtime": 1781379907.6309333,
+    "ast_hash": "e11c3f9e7d8720cfb7b3e2418d966034",
+    "semantic_hash": "e11c3f9e7d8720cfb7b3e2418d966034"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\src\\types\\next-auth.d.ts": {
+    "mtime": 1781379907.4139318,
+    "ast_hash": "a833cb73cb5abea796c47baa0a80cf2a",
+    "semantic_hash": "a833cb73cb5abea796c47baa0a80cf2a"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\tsconfig.json": {
+    "mtime": 1781375981.5089853,
+    "ast_hash": "ee17fd1c97c735e9f3564e3f5251f125",
+    "semantic_hash": "ee17fd1c97c735e9f3564e3f5251f125"
+  },
+  "D:\\@2026\\RPC_Test\\AGENTS.md": {
+    "mtime": 1781379908.6281395,
+    "ast_hash": "d922ce78d158c640193b3776fc8b0977",
+    "semantic_hash": "d922ce78d158c640193b3776fc8b0977"
+  },
+  "D:\\@2026\\RPC_Test\\CONTEXT.md": {
+    "mtime": 1781379908.6006129,
+    "ast_hash": "267c182ea303011e41477e552f84cbf6",
+    "semantic_hash": "267c182ea303011e41477e552f84cbf6"
+  },
+  "D:\\@2026\\RPC_Test\\README.md": {
+    "mtime": 1781379906.3991518,
+    "ast_hash": "471f084a0a5312aaef0cfc6e004d2cdb",
+    "semantic_hash": "471f084a0a5312aaef0cfc6e004d2cdb"
+  },
+  "D:\\@2026\\RPC_Test\\backend\\README.md": {
+    "mtime": 1781379906.4223871,
+    "ast_hash": "214fccac92a267c7a70f3ea021011b58",
+    "semantic_hash": "214fccac92a267c7a70f3ea021011b58"
+  },
+  "D:\\@2026\\RPC_Test\\docker\\docker-compose.db.yml": {
+    "mtime": 1781373309.2754302,
+    "ast_hash": "3558cbab4434298096a81beb4ce8dc2c",
+    "semantic_hash": "3558cbab4434298096a81beb4ce8dc2c"
+  },
+  "D:\\@2026\\RPC_Test\\docker\\docker-compose.yml": {
+    "mtime": 1781373310.2302837,
+    "ast_hash": "812639092c2ad6522c72c110bc605e47",
+    "semantic_hash": "812639092c2ad6522c72c110bc605e47"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\README.md": {
+    "mtime": 1781379906.218391,
+    "ast_hash": "75c1b28ea67044bd019c0bc8e30c0dad",
+    "semantic_hash": "75c1b28ea67044bd019c0bc8e30c0dad"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\backend\\README.md": {
+    "mtime": 1781373179.4393003,
+    "ast_hash": "0d5b4f5231aeb35c3c9602b586c08105",
+    "semantic_hash": "0d5b4f5231aeb35c3c9602b586c08105"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\backend\\api-design.md": {
+    "mtime": 1781379906.5646143,
+    "ast_hash": "49cfe3f7655de0393e88cef8d007c2f6",
+    "semantic_hash": "49cfe3f7655de0393e88cef8d007c2f6"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\backend\\architecture.md": {
+    "mtime": 1781379906.494188,
+    "ast_hash": "9d5cd3d9c1276ba9610f67e58a208151",
+    "semantic_hash": "9d5cd3d9c1276ba9610f67e58a208151"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\backend\\docker.md": {
+    "mtime": 1781372722.595856,
+    "ast_hash": "3f9d1a6f0251622c9e605448d989d35f",
+    "semantic_hash": "3f9d1a6f0251622c9e605448d989d35f"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\backend\\naming-conventions.md": {
+    "mtime": 1781379906.6008985,
+    "ast_hash": "79aacd1fce632275448eade358839d47",
+    "semantic_hash": "79aacd1fce632275448eade358839d47"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\backend\\v1.1-changes.md": {
+    "mtime": 1781379908.5709121,
+    "ast_hash": "79db6db8f23730eee0a1fc37cb2eb7f5",
+    "semantic_hash": "79db6db8f23730eee0a1fc37cb2eb7f5"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\features\\activity-log.md": {
+    "mtime": 1781379908.5409477,
+    "ast_hash": "27cb370644cc949c1f4176c083fef714",
+    "semantic_hash": "27cb370644cc949c1f4176c083fef714"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\features\\categories.md": {
+    "mtime": 1781379906.3001945,
+    "ast_hash": "73e9ccadd1f71fc0ff11bf9b465344df",
+    "semantic_hash": "73e9ccadd1f71fc0ff11bf9b465344df"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\features\\component-groups.md": {
+    "mtime": 1781379908.5140927,
+    "ast_hash": "65d188bfc3f5d932fbb5e9127b1b0e41",
+    "semantic_hash": "65d188bfc3f5d932fbb5e9127b1b0e41"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\features\\components.md": {
+    "mtime": 1781379906.238786,
+    "ast_hash": "8d038ec2140102ac714e25198fc42695",
+    "semantic_hash": "8d038ec2140102ac714e25198fc42695"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\features\\inventory-logs.md": {
+    "mtime": 1781379906.3345542,
+    "ast_hash": "09708cd14a42d2e778db96c151567c35",
+    "semantic_hash": "09708cd14a42d2e778db96c151567c35"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\features\\out-of-scope-v1.md": {
+    "mtime": 1781379906.3738139,
+    "ast_hash": "f81b6d294999f83d8c796cf7c4d6b886",
+    "semantic_hash": "f81b6d294999f83d8c796cf7c4d6b886"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\features\\search-and-filter.md": {
+    "mtime": 1781371397.3598683,
+    "ast_hash": "0b78c798962bdd0ec8c4660b7f9e32f9",
+    "semantic_hash": "0b78c798962bdd0ec8c4660b7f9e32f9"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\features\\storage-locations.md": {
+    "mtime": 1781379906.2746682,
+    "ast_hash": "89a90c1344fb6df7451e25e917abb0aa",
+    "semantic_hash": "89a90c1344fb6df7451e25e917abb0aa"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\features\\user-accounts.md": {
+    "mtime": 1781373260.6506011,
+    "ast_hash": "541964ace47e2a3ce7947a6ce98e2cbc",
+    "semantic_hash": "541964ace47e2a3ce7947a6ce98e2cbc"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\frontend\\README.md": {
+    "mtime": 1781379906.4737256,
+    "ast_hash": "52a36b56ac08008f5ddaedd6492a3f7f",
+    "semantic_hash": "52a36b56ac08008f5ddaedd6492a3f7f"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\frontend\\architecture.md": {
+    "mtime": 1781379906.5200644,
+    "ast_hash": "0db780ed9980f7e1194289cfdcf08e83",
+    "semantic_hash": "0db780ed9980f7e1194289cfdcf08e83"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\frontend\\folder-structure.md": {
+    "mtime": 1781379907.2209244,
+    "ast_hash": "b875274db7d28fa5ee43a287f1f2799b",
+    "semantic_hash": "b875274db7d28fa5ee43a287f1f2799b"
+  },
+  "D:\\@2026\\RPC_Test\\docs\\frontend\\naming-conventions.md": {
+    "mtime": 1781379906.626896,
+    "ast_hash": "45c074a79cd9f2b9afa74bda5a47153b",
+    "semantic_hash": "45c074a79cd9f2b9afa74bda5a47153b"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\README.md": {
+    "mtime": 1781379906.4492254,
+    "ast_hash": "c1516799c7c8b82df118775e5571e432",
+    "semantic_hash": "c1516799c7c8b82df118775e5571e432"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\pnpm-workspace.yaml": {
+    "mtime": 1781376171.6121778,
+    "ast_hash": "78b7add3e777b0e02c376869fe27ade6",
+    "semantic_hash": "78b7add3e777b0e02c376869fe27ade6"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\public\\file.svg": {
+    "mtime": 1781375968.6753514,
+    "ast_hash": "d09f95206c3fa0bb9bd9fefabfd0ea71",
+    "semantic_hash": "d09f95206c3fa0bb9bd9fefabfd0ea71"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\public\\globe.svg": {
+    "mtime": 1781375968.6753514,
+    "ast_hash": "2aaafa6a49b6563925fe440891e32717",
+    "semantic_hash": "2aaafa6a49b6563925fe440891e32717"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\public\\next.svg": {
+    "mtime": 1781375968.6753514,
+    "ast_hash": "8e061864f388b47f33a1c3780831193e",
+    "semantic_hash": "8e061864f388b47f33a1c3780831193e"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\public\\vercel.svg": {
+    "mtime": 1781375968.6773584,
+    "ast_hash": "c0af2f507b369b085b35ef4bbe3bcf1e",
+    "semantic_hash": "c0af2f507b369b085b35ef4bbe3bcf1e"
+  },
+  "D:\\@2026\\RPC_Test\\frontend\\public\\window.svg": {
+    "mtime": 1781375968.6773584,
+    "ast_hash": "a2760511c65806022ad20adf74370ff3",
+    "semantic_hash": "a2760511c65806022ad20adf74370ff3"
+  }
+}

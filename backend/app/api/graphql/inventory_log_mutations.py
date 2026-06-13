@@ -17,6 +17,7 @@ class ApplyInventoryLogInputGQL:
     type: InventoryLogTypeGQL
     quantity: int
     box: str
+    from_box: str | None = None
     reason: str | None = None
     related_log_id: strawberry.ID | None = None
 
@@ -66,6 +67,7 @@ class InventoryLogMutation:
                 type=InventoryLogType(input.type.value),
                 quantity=input.quantity,
                 box=input.box,
+                from_box=input.from_box,
                 reason=input.reason,
                 related_log_id=input.related_log_id,
             ),

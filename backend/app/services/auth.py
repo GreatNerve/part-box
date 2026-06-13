@@ -1,5 +1,5 @@
 from app.core.auth import create_access_token, hash_password, verify_password
-from app.core.constants import DEFAULT_CATEGORY_NAMES
+from app.core.constants import DEFAULT_CATEGORIES
 from app.models import Category, User
 from app.schemas.user import AuthTokenDTO, LoginInput, RegisterInput, UserDTO, ValidationErrorDTO
 
@@ -19,8 +19,8 @@ async def seed_default_categories(user: User) -> None:
         return
     await Category.bulk_create(
         [
-            Category(user=user, name=name, is_default=True)
-            for name in DEFAULT_CATEGORY_NAMES
+            Category(user=user, name=name, is_default=True, low_stock_threshold=threshold)
+            for name, threshold in DEFAULT_CATEGORIES
         ]
     )
 

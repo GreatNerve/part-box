@@ -2,70 +2,88 @@
 
 ## Summary
 
-All stock changes are **logged**. Students never silently edit quantities—every add, use, return, or loss creates a **log entry** with date, quantity, box, and context.
+All stock changes are **logged**. Students never silently edit quantities—every add, use, return, loss, or **box move** creates a **log entry** with date, quantity, box context, and notes.
 
 ## User story
 
-> As a student, I want a history of when I used parts, returned them, or lost/burned them, so I can trust my inventory counts.
+> As a student, I want a history of when I used parts, returned them, moved them between boxes, or lost/burned them, so I can trust my inventory counts.
 
-## Log types (v1)
+## Log types (v1.1)
 
 | Type | Effect on qty | Required fields |
 |------|----------------|-----------------|
-| **Add stock** | +qty in chosen box | Component, box, qty, note (e.g. "Amazon order", "Lab kit") |
-| **Use** | −qty in chosen box | Component, box, qty, reason (e.g. "Lab 3", "Robot wheel") |
-| **Return** | +qty in box (typically same as original use) | Linked to a prior **Use** log; marked as **Return** |
+| **Add stock** | +qty in chosen box | Component, box, qty, note |
+| **Use** | −qty in chosen box | Component, box, qty, reason |
+| **Return** | +qty in box | Linked to prior **Use** via `relatedLogId` |
 | **Lost** | −qty in chosen box | Component, box, qty, reason |
-| **Burn / defective** | −qty in chosen box | Component, box, qty, reason (burn, defective, damaged, etc.) |
+| **Burn / defective** | −qty in chosen box | Component, box, qty, reason |
+| **Reallocate** | −qty in `fromBox`, +qty in `toBox` (same component, atomic) | Component, fromBox, toBox, qty, optional reason |
 
-**Date** is set automatically at log creation (server or client clock—implementation detail).
+**Date** is set automatically at log creation.
+
+### Reallocate (new)
+
+Moves quantity between boxes **without changing component total**.
+
+- One atomic service operation → one log row (type `REALLOCATE`).
+- Fails if `fromBox` has insufficient qty.
+- Creates/adjusts `ComponentBoxQuantity` for both boxes.
+- See [storage-locations.md](./storage-locations.md#stock-reallocation).
 
 ## Behaviors
 
 ### Add stock
 
-- Student selects component, box, quantity to add, and optional short note.
+- Student selects component, box, quantity, optional note.
 - Box quantity and component total increase.
-- Log appears in component history as **Add stock**.
 
 ### Use
 
-- Student selects component, box, quantity used, and short reason.
-- Box quantity decreases; cannot exceed available qty in that box.
-- Log appears as **Use**.
+- Student selects component, box, quantity, reason.
+- Cannot exceed available qty in that box.
 
 ### Return
 
-- From a **Use** log entry, student clicks **Return**.
-- Creates a new log entry:
-  - Type: **Return**
-  - References the original Use log
-  - Restores quantity (full return or partial—see below)
-- Marked clearly as **Return** in history.
-
-**Partial return:** student may return fewer pieces than were used (e.g. used 5, return 2). Implementation must keep Use and Return quantities consistent.
+- From a **Use** log entry (or dialog with `relatedLogId`).
+- Partial returns supported.
 
 ### Lost / burn / defective
 
-- Same flow as Use (pick box, qty, reason) but log type distinguishes **Lost**, **Burn**, or **Defective** (or single "Loss/damage" type with reason enum—implementation choice).
-- Decreases quantity; does not require linking to a prior Use log.
+- Decreases quantity; no link to Use required.
 
-## Log history view
+### Reallocate
 
-- Per component: chronological list of all log entries.
-- Shows: date, type, qty (+/−), box, reason/note, link to related Use for Returns.
+- Student picks **from box**, **to box**, quantity.
+- UI on component detail (and optional quick action).
+- Box suggestions show known boxes for the component.
+
+## Log history views
+
+| View | Scope |
+|------|--------|
+| Component detail | `componentLogs(componentId)` — existing |
+| **Activity log** | `inventoryLogs` — all components — [activity-log.md](./activity-log.md) |
+
+Both show: date, type, qty, box(es), reason, component name (central only), link to related Use for Returns.
 
 ## Acceptance criteria
 
-- [ ] Adding stock creates an Add stock log and increases box qty.
-- [ ] Use creates a log and decreases box qty; fails if insufficient stock.
-- [ ] Return button on a Use log creates a Return entry and increases qty.
-- [ ] Return entries reference the Use they undo (full or partial).
-- [ ] Lost/burn/defective entries decrease qty with typed reason.
+- [ ] Adding stock creates log and increases box qty.
+- [ ] Use decreases box qty; fails if insufficient stock.
+- [ ] Return references Use log (full or partial).
+- [ ] Lost/burn/defective decrease qty with reason.
+- [ ] **Reallocate** moves qty between boxes atomically with one log row.
+- [ ] Central activity log lists all user logs.
 - [ ] No quantity change without a corresponding log row.
 
-## Out of scope (v1)
+## Out of scope (v1.1)
 
-- Edit or delete historical logs (immutable audit trail preferred)
+- Edit or delete historical logs (immutable audit trail)
 - Bulk import of logs
 - Export log CSV
+
+## Related
+
+- [activity-log.md](./activity-log.md)
+- [storage-locations.md](./storage-locations.md)
+- [../backend/api-design.md](../backend/api-design.md)

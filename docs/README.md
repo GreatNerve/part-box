@@ -14,7 +14,7 @@ Students often:
 
 | In scope | Out of scope (later) |
 |----------|----------------------|
-| Per-student login and private inventory | Low-stock alerts |
+| Per-student login and private inventory | Push/email low-stock alerts |
 | Components with multi-box quantities | Photos |
 | Usage and stock movement logs | Price tracking |
 | Return, lost, burn, defective log types | Export / backup |
@@ -34,6 +34,8 @@ Students often:
 | [inventory-logs.md](./features/inventory-logs.md) | Add stock, use, return, loss/damage logs |
 | [search-and-filter.md](./features/search-and-filter.md) | Finding parts in the catalog |
 | [out-of-scope-v1.md](./features/out-of-scope-v1.md) | Deferred features |
+| [activity-log.md](./features/activity-log.md) | Central activity log (v1.1) |
+| [component-groups.md](./features/component-groups.md) | Grouping (deferred) |
 
 ### Backend
 
@@ -50,8 +52,9 @@ Students often:
 | Doc | Topic |
 |-----|--------|
 | [frontend/README.md](./frontend/README.md) | Frontend docs index |
-| [frontend/architecture.md](./frontend/architecture.md) | GraphQL client, Vite vs Next.js, auth |
-| [frontend/naming-conventions.md](./frontend/naming-conventions.md) | Frontend folder and file naming |
+| [frontend/architecture.md](./frontend/architecture.md) | NextAuth, TanStack Query, shared UI components |
+| [frontend/folder-structure.md](./frontend/folder-structure.md) | Full `src/` layout |
+| [frontend/naming-conventions.md](./frontend/naming-conventions.md) | File and folder naming |
 
 ## Repo layout
 

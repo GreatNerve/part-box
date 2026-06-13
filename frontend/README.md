@@ -1,70 +1,75 @@
 # Frontend
 
-Next.js web app for the electronics inventory system (dev). Production target: **Vite SPA** with the same GraphQL client code.
-
-## Role
-
-- Student-facing UI for login, inventory, and logs
-- Calls backend **GraphQL API** from the browser — not gRPC
+Next.js app for the electronics inventory system. Production target: **Vite SPA** reusing `src/components`, `src/hooks`, `src/lib`, and `src/react-query`.
 
 ## Stack
 
 | Piece | Tool |
 |-------|------|
-| Dev UI | Next.js (App Router) |
-| Production UI | Vite SPA (same components/lib) |
-| Backend access | GraphQL client (graphql-request, urql, or Apollo) |
-| Auth | JWT in `Authorization: Bearer` header |
+| Framework | Next.js (latest), App Router, `src/` |
+| UI | shadcn/ui (Vega preset), Tailwind, dark default |
+| Auth | NextAuth v5 (beta) — Credentials → GraphQL JWT |
+| Data | graphql-request + TanStack Query |
+| Forms | react-hook-form + Zod, FormGenerator |
+| Tables | TanStack Table — shared DataTable (table / mobile cards) |
 
-## Why not gRPC from the browser?
+## Role
 
-Browsers cannot call native gRPC. Backend exposes GraphQL on FastAPI. Do **not** use Next.js API routes as a gRPC bridge — that pattern does not carry over to Vite.
+- Student UI: login, components, categories, settings
+- GraphQL to backend `:8000` — not gRPC
 
-## Project structure
+## Project structure (summary)
 
 ```
-frontend/
-├── README.md
-├── app/                  # Next.js App Router pages
-├── components/           # PascalCase — ComponentList.tsx
-├── hooks/                # camelCase — useAuth.ts
-├── lib/
-│   ├── graphql/          # client, queries, mutations
-│   └── auth/             # token helpers
-└── package.json
+frontend/src/
+  app/(public)/(auth)/     login, register
+  app/(app)/               sidebar + features
+  auth/                    NextAuth config
+  components/ui/           shadcn
+  components/includes/     DataTable, DialogForm, FormGenerator
+  components/modules/      page compositions
+  schema/                  zod + form field defs
+  lib/graphql/
+  hooks/graphql/           useGraphQuery, useGraphMutation
+  react-query/queries|mutations/
 ```
 
-Naming conventions: [`../docs/frontend/naming-conventions.md`](../docs/frontend/naming-conventions.md)
+Full tree: [`../docs/frontend/folder-structure.md`](../docs/frontend/folder-structure.md)
 
 ## Documentation
 
-Full technical design: [`../docs/frontend/`](../docs/frontend/)
-
 | Doc | Topic |
 |-----|--------|
-| [architecture.md](../docs/frontend/architecture.md) | GraphQL client, auth, CORS, screen mapping |
-| [naming-conventions.md](../docs/frontend/naming-conventions.md) | Folder and file naming |
+| [architecture.md](../docs/frontend/architecture.md) | Decisions, auth, data layer, shared components |
+| [folder-structure.md](../docs/frontend/folder-structure.md) | Complete `src/` layout |
+| [naming-conventions.md](../docs/frontend/naming-conventions.md) | File naming rules |
 
-Product / UX rules: [`../docs/features/`](../docs/features/)
+Product rules: [`../docs/features/`](../docs/features/)
 
 ## Getting started
 
-Not scaffolded yet. Typical dev flow:
-
 ```bash
 cd frontend
-npm install
+pnpm install
 
-# .env.local
-NEXT_PUBLIC_GRAPHQL_URL=http://localhost:8000/graphql
+# copy and edit env
+cp .env.example .env.local
+# NEXT_PUBLIC_GRAPHQL_URL=http://localhost:8000/graphql
+# AUTH_SECRET=<long random string>
 
-npm run dev
+pnpm dev
 ```
 
-App runs at `http://localhost:3000` by default. Backend must be running on `:8000`.
+Requires backend on `:8000` and Postgres running.
+
+Optional — regenerate types when the backend schema changes (backend must be up):
+
+```bash
+pnpm graphql:codegen
+```
+
+Hand-written documents live in `src/lib/graphql/documents/` until codegen output is adopted.
 
 ## Backend
 
-GraphQL endpoint: `http://localhost:8000/graphql`
-
-Backend design: [`../docs/backend/architecture.md`](../docs/backend/architecture.md)
+GraphQL: `http://localhost:8000/graphql` — see [`../docs/backend/architecture.md`](../docs/backend/architecture.md)

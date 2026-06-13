@@ -71,14 +71,23 @@ mutation Login($input: LoginInputGQL!) {
 
 CATEGORIES = """
 query Categories {
-  categories { id name isDefault }
+  categories { id name isDefault lowStockThreshold }
 }
 """
 
 CREATE_CATEGORY = """
 mutation CreateCategory($input: CreateCategoryInputGQL!) {
   createCategory(input: $input) {
-    ... on CategoryType { id name isDefault }
+    ... on CategoryType { id name isDefault lowStockThreshold }
+    ... on ValidationErrorType { code message }
+  }
+}
+"""
+
+UPDATE_CATEGORY = """
+mutation UpdateCategory($input: UpdateCategoryInputGQL!) {
+  updateCategory(input: $input) {
+    ... on CategoryType { id name isDefault lowStockThreshold }
     ... on ValidationErrorType { code message }
   }
 }
@@ -132,10 +141,19 @@ APPLY_LOG = """
 mutation ApplyLog($input: ApplyInventoryLogInputGQL!) {
   applyInventoryLog(input: $input) {
     ... on ApplyInventoryLogSuccess {
-      log { id type quantity box relatedLogId }
+      log { id type quantity box fromBox relatedLogId }
       component { id totalQty boxQuantities { box quantity } }
     }
     ... on ValidationErrorType { code message }
+  }
+}
+"""
+
+INVENTORY_LOGS = """
+query InventoryLogs($filter: InventoryLogFilterInputGQL, $pagination: PaginationInputGQL) {
+  inventoryLogs(filter: $filter, pagination: $pagination) {
+    totalCount
+    items { id type quantity box fromBox componentName componentId }
   }
 }
 """
@@ -203,6 +221,39 @@ async def test_full_user_lifecycle(gql_client: AsyncClient) -> None:
         categories = categories_data["categories"]
         assert len(categories) == 7
         sensor_category = next(item for item in categories if item["name"] == "Sensor")
+        assert sensor_category["lowStockThreshold"] == 3
+
+        # Update category threshold
+        updated_category = await gql(
+            gql_client,
+            UPDATE_CATEGORY,
+            {
+                "input": {
+                    "id": sensor_category["id"],
+                    "lowStockThreshold": 5,
+                }
+            },
+            token=token,
+        )
+        assert updated_category["updateCategory"]["lowStockThreshold"] == 5
+
+        # Default category rename blocked
+        rename_blocked = await gql_client.post(
+            "/graphql",
+            json={
+                "query": UPDATE_CATEGORY,
+                "variables": {
+                    "input": {
+                        "id": sensor_category["id"],
+                        "name": "Renamed Sensor",
+                    }
+                },
+            },
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        rename_payload = rename_blocked.json()
+        assert "errors" not in rename_payload
+        assert rename_payload["data"]["updateCategory"]["code"] == "VALIDATION_ERROR"
 
         # Custom category
         custom_category = await gql(
@@ -320,6 +371,38 @@ async def test_full_user_lifecycle(gql_client: AsyncClient) -> None:
             token=token,
         )
         assert added["applyInventoryLog"]["component"]["totalQty"] == 10
+
+        # Reallocate between boxes
+        reallocated = await gql(
+            gql_client,
+            APPLY_LOG,
+            {
+                "input": {
+                    "componentId": component_id,
+                    "type": "REALLOCATE",
+                    "quantity": 2,
+                    "fromBox": "Box 1",
+                    "box": "Box 2",
+                    "reason": "Reorganize drawer",
+                }
+            },
+            token=token,
+        )
+        realloc_result = reallocated["applyInventoryLog"]
+        assert realloc_result["component"]["totalQty"] == 10
+        assert realloc_result["log"]["type"] == "REALLOCATE"
+        assert realloc_result["log"]["fromBox"] == "Box 1"
+        assert realloc_result["log"]["box"] == "Box 2"
+
+        # Central activity log
+        activity = await gql(
+            gql_client,
+            INVENTORY_LOGS,
+            {"filter": {"search": "DHT"}, "pagination": {"limit": 20, "offset": 0}},
+            token=token,
+        )
+        assert activity["inventoryLogs"]["totalCount"] >= 6
+        assert any(item["type"] == "REALLOCATE" for item in activity["inventoryLogs"]["items"])
 
         # Logs history
         logs = await gql(
