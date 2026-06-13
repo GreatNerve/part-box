@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package inventory.v1;
+
+option py_generic_services = false;
+
+import "v1/auth.proto";
+
+message ListComponentsRequest {
+  string search = 1;
+  string category_id = 2;
+  string box = 3;
+  int32 limit = 4;
+  int32 offset = 5;
+}
+
+message ComponentMessage {
+  string id = 1;
+  string name = 2;
+  string category_id = 3;
+  int32 total_qty = 4;
+}
+
+message ListComponentsResponse {
+  repeated ComponentMessage items = 1;
+  int32 total_count = 2;
+}
+
+service InventoryService {
+  rpc ListComponents(ListComponentsRequest) returns (ListComponentsResponse);
+}

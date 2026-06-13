@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+htmlcov/
+.coverage
+*.egg
+
+# uv lockfile is committed for reproducible installs
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Node (frontend)
+node_modules/
+.next/
+out/
+dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker/.env
+
+# Generated (optional — uncomment if stubs are build-time only)
+# backend/app/grpc/gen/

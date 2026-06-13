@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package inventory.v1;
+
+option py_generic_services = false;
+
+message UserMessage {
+  string id = 1;
+  string email = 2;
+  string display_name = 3;
+}
+
+message RegisterRequest {
+  string email = 1;
+  string password = 2;
+  string display_name = 3;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message AuthResponse {
+  string token = 1;
+  UserMessage user = 2;
+}
+
+message ValidationErrorMessage {
+  string code = 1;
+  string message = 2;
+}
+
+service AuthService {
+  rpc Register(RegisterRequest) returns (AuthResponse);
+  rpc Login(LoginRequest) returns (AuthResponse);
+}

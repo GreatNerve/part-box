@@ -1,0 +1,419 @@
+# API Design
+
+GraphQL schema conventions and operation shapes for v1. gRPC proto mirrors these capabilities where practical.
+
+**Conventions:** camelCase field and argument names. Entity IDs are **UUID strings** (`ID!` in GraphQL), stored as **UUID primary keys** in PostgreSQL.
+
+## Decisions summary
+
+| Topic | Choice |
+|-------|--------|
+| Inventory log mutations | Single `applyInventoryLog` with `InventoryLogType` enum |
+| Errors | Union payload for expected business failures; GraphQL `errors` for auth/server faults |
+| Pagination | Offset — `limit` + `offset` |
+| List filters | Input objects — `ComponentFilterInput`, `PaginationInput` |
+| Sort | `ComponentSortInput` nested inside filter |
+| IDs | UUID in API and as Postgres primary keys on all tables |
+| Auth identity | Email + password (unique email) |
+| Naming | camelCase throughout GraphQL |
+
+---
+
+## GraphQL types (core)
+
+```graphql
+enum InventoryLogType {
+  ADD_STOCK
+  USE
+  RETURN
+  LOST
+  BURN
+  DEFECTIVE
+}
+
+enum ComponentSortField {
+  NAME
+  CATEGORY
+  TOTAL_QTY
+  UPDATED_AT
+}
+
+enum SortDirection {
+  ASC
+  DESC
+}
+
+type Component {
+  id: ID!
+  name: String!
+  categoryId: ID!
+  categoryName: String!
+  datasheetUrl: String
+  totalQty: Int!
+  boxQuantities: [BoxQuantity!]!
+  updatedAt: DateTime!
+}
+
+type BoxQuantity {
+  box: String!
+  quantity: Int!
+}
+
+type InventoryLog {
+  id: ID!
+  componentId: ID!
+  type: InventoryLogType!
+  quantity: Int!
+  box: String!
+  reason: String
+  relatedLogId: ID          # set on RETURN → links USE log
+  createdAt: DateTime!
+}
+
+type Category {
+  id: ID!
+  name: String!
+  isDefault: Boolean!
+}
+
+type User {
+  id: ID!
+  email: String!
+  displayName: String
+  createdAt: DateTime!
+}
+```
+
+---
+
+## Pagination
+
+Shared input and response wrapper:
+
+```graphql
+input PaginationInput {
+  limit: Int = 20
+  offset: Int = 0
+}
+
+type ComponentConnection {
+  items: [Component!]!
+  totalCount: Int!
+  limit: Int!
+  offset: Int!
+}
+
+type InventoryLogConnection {
+  items: [InventoryLog!]!
+  totalCount: Int!
+  limit: Int!
+  offset: Int!
+}
+```
+
+Used on `components` and `component { logs(...) }`.
+
+---
+
+## Filter and sort
+
+```graphql
+input ComponentSortInput {
+  field: ComponentSortField!
+  direction: SortDirection = ASC
+}
+
+input ComponentFilterInput {
+  search: String              # substring on component name
+  categoryId: ID
+  box: String                 # components with qty > 0 in this box
+  sort: ComponentSortInput
+}
+```
+
+**Query:**
+
+```graphql
+components(
+  filter: ComponentFilterInput
+  pagination: PaginationInput
+): ComponentConnection!
+```
+
+All filter fields optional. Combined with AND semantics (search + category + box together).
+
+---
+
+## Queries
+
+| Query | Args | Returns |
+|-------|------|---------|
+| `me` | — | Current user (requires auth) |
+| `categories` | — | `[Category!]!` |
+| `components` | `filter`, `pagination` | `ComponentConnection!` |
+| `component` | `id: ID!` | `Component` (nullable if not found / not owned) |
+| `componentLogs` | `componentId: ID!`, `pagination` | `InventoryLogConnection!` |
+
+`component` includes nested `boxQuantities`. Logs fetched via `componentLogs` or nested field on detail — pick one in implementation; both may expose same data.
+
+---
+
+## Mutations
+
+### Auth (public — no JWT required)
+
+```graphql
+input RegisterInput {
+  email: String!
+  password: String!
+  displayName: String
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+type Mutation {
+  register(input: RegisterInput!): AuthPayload!
+  login(input: LoginInput!): AuthPayload!
+}
+```
+
+Auth mutations return payload directly or use union — implementation may use simple payload; business validation (duplicate email) uses union pattern below.
+
+### Components
+
+```graphql
+input CreateComponentInput {
+  name: String!
+  categoryId: ID!
+  datasheetUrl: String
+  initialBoxQuantities: [BoxQuantityInput!]   # optional at create
+}
+
+input BoxQuantityInput {
+  box: String!
+  quantity: Int!
+}
+
+input UpdateComponentInput {
+  id: ID!
+  name: String
+  categoryId: ID
+  datasheetUrl: String
+}
+
+type Mutation {
+  createComponent(input: CreateComponentInput!): CreateComponentResult!
+  updateComponent(input: UpdateComponentInput!): UpdateComponentResult!
+  deleteComponent(id: ID!): DeleteComponentResult!
+}
+```
+
+Initial box quantities at create still produce **ADD_STOCK** logs internally (or batch log — service layer enforces log-only qty changes).
+
+### Categories
+
+```graphql
+input CreateCategoryInput {
+  name: String!
+}
+
+type Mutation {
+  createCategory(input: CreateCategoryInput!): CreateCategoryResult!
+}
+```
+
+### Inventory logs — unified mutation
+
+Single entry point for all stock movements:
+
+```graphql
+input ApplyInventoryLogInput {
+  componentId: ID!
+  type: InventoryLogType!
+  quantity: Int!                # always positive; direction implied by type
+  box: String!
+  reason: String
+  relatedLogId: ID              # required when type = RETURN (USE log id)
+}
+
+type ApplyInventoryLogSuccess {
+  log: InventoryLog!
+  component: Component!         # updated totals + box breakdown
+}
+
+type Mutation {
+  applyInventoryLog(input: ApplyInventoryLogInput!): ApplyInventoryLogResult!
+}
+```
+
+**Rules by type:**
+
+| Type | Qty effect | Extra rules |
+|------|------------|-------------|
+| `ADD_STOCK` | +qty in box | — |
+| `USE` | −qty in box | must not go negative |
+| `RETURN` | +qty in box | `relatedLogId` required; must reference USE log; return qty ≤ remaining unreturned qty on that USE |
+| `LOST` | −qty in box | must not go negative |
+| `BURN` | −qty in box | must not go negative |
+| `DEFECTIVE` | −qty in box | must not go negative |
+
+Frontend "Return" button on a USE log calls:
+
+```graphql
+applyInventoryLog(input: {
+  componentId: "..."
+  type: RETURN
+  quantity: 2
+  box: "Box 1"
+  relatedLogId: "<use-log-id>"
+  reason: "Unused for lab"
+})
+```
+
+---
+
+## Error handling
+
+### Expected business failures → union result types
+
+Mutations that can fail validation return a **union**, not thrown GraphQL errors:
+
+```graphql
+enum ErrorCode {
+  INSUFFICIENT_STOCK
+  INVALID_RETURN_LINK
+  RETURN_QTY_EXCEEDED
+  DUPLICATE_COMPONENT_NAME
+  DUPLICATE_CATEGORY_NAME
+  CATEGORY_IN_USE
+  NOT_FOUND
+  VALIDATION_ERROR
+}
+
+type FieldError {
+  field: String!
+  message: String!
+}
+
+type ValidationError {
+  code: ErrorCode!
+  message: String!
+  fieldErrors: [FieldError!]
+}
+
+union ApplyInventoryLogResult =
+  ApplyInventoryLogSuccess
+  | ValidationError
+
+union CreateComponentResult =
+  Component
+  | ValidationError
+
+# same pattern for updateComponent, deleteComponent, createCategory, etc.
+```
+
+Client pattern:
+
+```typescript
+if (result.__typename === 'ValidationError') {
+  showError(result.message, result.code);
+} else {
+  updateUI(result.component);
+}
+```
+
+### Unexpected failures → GraphQL `errors`
+
+Use standard GraphQL `errors` array for:
+
+- Missing or invalid JWT (except public `login` / `register`)
+- Internal server errors (500)
+- Malformed requests
+
+Include `extensions.code` when helpful (`UNAUTHENTICATED`, `FORBIDDEN`, `INTERNAL`).
+
+**Do not** use GraphQL errors for insufficient stock or bad return links — those belong in the union.
+
+---
+
+## gRPC parity
+
+Proto should mirror GraphQL capabilities:
+
+| GraphQL | gRPC (illustrative) |
+|---------|---------------------|
+| `components(filter, pagination)` | `ListComponents(ListComponentsRequest)` |
+| `component(id)` | `GetComponent(GetComponentRequest)` |
+| `applyInventoryLog(input)` | `ApplyInventoryLog(ApplyInventoryLogRequest)` |
+| `createComponent(input)` | `CreateComponent(CreateComponentRequest)` |
+
+- Request messages use the same filter/sort/pagination fields as GraphQL inputs.
+- Response messages include `oneof` for success vs validation error (proto equivalent of GraphQL union).
+- Entity IDs are UUID strings in proto (`string id = 1`).
+
+---
+
+## Example operations
+
+### List components with filter, sort, pagination
+
+```graphql
+query ListComponents {
+  components(
+    filter: {
+      search: "DHT"
+      categoryId: "550e8400-e29b-41d4-a716-446655440000"
+      box: "Box 2"
+      sort: { field: NAME, direction: ASC }
+    }
+    pagination: { limit: 20, offset: 0 }
+  ) {
+    totalCount
+    items {
+      id
+      name
+      totalQty
+      categoryName
+    }
+  }
+}
+```
+
+### Apply inventory log
+
+```graphql
+mutation UseParts {
+  applyInventoryLog(input: {
+    componentId: "550e8400-e29b-41d4-a716-446655440001"
+    type: USE
+    quantity: 3
+    box: "Box 1"
+    reason: "IoT assignment"
+  }) {
+    ... on ApplyInventoryLogSuccess {
+      log { id type quantity box createdAt }
+      component { id totalQty boxQuantities { box quantity } }
+    }
+    ... on ValidationError {
+      code
+      message
+    }
+  }
+}
+```
+
+---
+
+## Related docs
+
+- Product rules: [`../features/`](../features/)
+- Backend stack: [`architecture.md`](./architecture.md)
+- Frontend client usage: [`../frontend/architecture.md`](../frontend/architecture.md)
